@@ -1,4 +1,4 @@
-import "../public/global.css";
+import "./global.css";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Link from "next/link";
