@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import site from "@/src/components/site";
+import site from "@/components/site";
 
 export default function robots(): MetadataRoute.Robots {
   return {

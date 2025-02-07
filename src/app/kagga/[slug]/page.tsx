@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
-import { Mdx } from "@/src/components/mdx";
+import { Mdx } from "@/components/mdx";
 import { Metadata } from "next";
 import { Suspense } from "react";
-import ViewCounter from "@/src/components/view-counter";
+import ViewCounter from "@/components/view-counter";
 
 // Precompute sorted slugs and posts map
 const sortedSlugs = allPosts

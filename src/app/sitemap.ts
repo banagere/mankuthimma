@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 import { allPosts } from "contentlayer/generated";
-import site from "@/src/components/site";
+import site from "@/components/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   let note = allPosts.map((post) => ({
