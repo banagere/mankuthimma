@@ -4,7 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import Link from "next/link";
 import { Metadata } from "next";
 import Image from "next/image";
-import logo from "@/public/apple-touch-icon.png";
+import logo from "../../public/apple-touch-icon.png";
 
 interface RootLayoutProps {
   children: React.ReactNode;

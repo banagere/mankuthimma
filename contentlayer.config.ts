@@ -24,6 +24,6 @@ const Post = defineDocumentType(() => ({
 }));
 
 export default makeSource({
-  contentDirPath: "app/kagga/data",
+  contentDirPath: "src/data",
   documentTypes: [Post],
 });
