@@ -1,0 +1,503 @@
+import { v4 as uuidv4 } from "uuid";
+
+interface KaggaProps {
+  id: string;
+  order: number;
+  title: string;
+  slug: string;
+  verses: {
+    page: number;
+    kannada: string;
+    kannada_explanation: string;
+    english_explanation: string;
+  }[];
+}
+
+const kaggaData: Omit<KaggaProps, "id">[] = [
+  {
+    order: 76,
+    title: "Balance of Mind",
+    slug: "balance-of-mind",
+    verses: [],
+  },
+  {
+    order: 77,
+    title: "Don't Shake the Tail",
+    slug: "dont-shake-the-tail",
+    verses: [],
+  },
+  {
+    order: 78,
+    title: "Creation is lowly",
+    slug: "creation-is-lowly",
+    verses: [],
+  },
+  { order: 79, title: "Reliable truth", slug: "reliable-truth", verses: [] },
+  {
+    order: 80,
+    title: "Body-horse, soul-rider",
+    slug: "body-horse-soul-rider",
+    verses: [],
+  },
+  {
+    order: 81,
+    title: "Sight, attachment, vision",
+    slug: "sight-attachment-vision",
+    verses: [],
+  },
+  { order: 82, title: "Love", slug: "love", verses: [] },
+  { order: 83, title: "Human history", slug: "human-history", verses: [] },
+  { order: 84, title: "Love is cruel", slug: "love-is-cruel", verses: [] },
+  {
+    order: 85,
+    title: "Emotion and passion",
+    slug: "emotion-and-passion",
+    verses: [],
+  },
+  { order: 86, title: "Human love", slug: "human-love", verses: [] },
+  {
+    order: 87,
+    title: "Parts make the whole",
+    slug: "parts-make-the-whole",
+    verses: [],
+  },
+  {
+    order: 88,
+    title: "Laughter and tears",
+    slug: "laughter-and-tears",
+    verses: [],
+  },
+  {
+    order: 89,
+    title: "Greatness of beauty",
+    slug: "greatness-of-beauty",
+    verses: [],
+  },
+  {
+    order: 90,
+    title: "Pulsations of brahman",
+    slug: "pulsations-of-brahman",
+    verses: [],
+  },
+  {
+    order: 91,
+    title: "Duality is interesting",
+    slug: "duality-is-interesting",
+    verses: [],
+  },
+  {
+    order: 92,
+    title: "Passion, compassion, peace",
+    slug: "passion-compassion-peace",
+    verses: [],
+  },
+  { order: 93, title: "Life poem", slug: "life-poem", verses: [] },
+  { order: 94, title: "Art", slug: "art", verses: [] },
+  { order: 95, title: "Poet-king", slug: "poet-king", verses: [] },
+  {
+    order: 96,
+    title: "Victory of humans over death",
+    slug: "victory-of-humans-over-death",
+    verses: [],
+  },
+  {
+    order: 97,
+    title: "Truth comes from fulfillment",
+    slug: "truth-comes-from-fulfillment",
+    verses: [],
+  },
+  {
+    order: 98,
+    title: "Devotion is natural",
+    slug: "devotion-is-natural",
+    verses: [],
+  },
+  {
+    order: 99,
+    title: "Scheme of penance",
+    slug: "scheme-of-penance",
+    verses: [],
+  },
+  { order: 100, title: "Worship", slug: "worship", verses: [] },
+  {
+    order: 101,
+    title: "Begging for a boon",
+    slug: "begging-for-a-boon",
+    verses: [],
+  },
+  {
+    order: 102,
+    title: "Rain of new goodness",
+    slug: "rain-of-new-goodness",
+    verses: [],
+  },
+  { order: 103, title: "Ancient, serene", slug: "ancient-serene", verses: [] },
+  {
+    order: 104,
+    title: "Experience is the proof",
+    slug: "experience-is-the-proof",
+    verses: [],
+  },
+  {
+    order: 105,
+    title: "Ancient wisdom, modern civilization",
+    slug: "ancient-wisdom-modern-civilization",
+    verses: [],
+  },
+  {
+    order: 106,
+    title: "≈öƒÅstras keep growing",
+    slug: "stras-keep-growing",
+    verses: [],
+  },
+  {
+    order: 107,
+    title: "Value of the individual",
+    slug: "value-of-the-individual",
+    verses: [],
+  },
+  {
+    order: 108,
+    title: "Burden of freedom",
+    slug: "burden-of-freedom",
+    verses: [],
+  },
+  { order: 109, title: "Human logic", slug: "human-logic", verses: [] },
+  {
+    order: 110,
+    title: "Greatness of the mind",
+    slug: "greatness-of-the-mind",
+    verses: [],
+  },
+  { order: 111, title: "Law of harmony", slug: "law-of-harmony", verses: [] },
+  { order: 112, title: "Inner light", slug: "inner-light", verses: [] },
+  {
+    order: 113,
+    title: "A≈õvattha tree of the world",
+    slug: "avattha-tree-of-the-world",
+    verses: [],
+  },
+  {
+    order: 114,
+    title: "Growth of qualities",
+    slug: "growth-of-qualities",
+    verses: [],
+  },
+  { order: 115, title: "Talent bud", slug: "talent-bud", verses: [] },
+  {
+    order: 116,
+    title: "Limits of courage",
+    slug: "limits-of-courage",
+    verses: [],
+  },
+  {
+    order: 117,
+    title: "Burden that befits the back",
+    slug: "burden-that-befits-the-back",
+    verses: [],
+  },
+  { order: 118, title: "Let life ripen", slug: "let-life-ripen", verses: [] },
+  {
+    order: 119,
+    title: "Courage is victory",
+    slug: "courage-is-victory",
+    verses: [],
+  },
+  { order: 120, title: "Divine actions", slug: "divine-actions", verses: [] },
+  {
+    order: 121,
+    title: "Brahman, the leader",
+    slug: "brahman-the-leader",
+    verses: [],
+  },
+  {
+    order: 122,
+    title: "Maturing by worldly life",
+    slug: "maturing-by-worldly-life",
+    verses: [],
+  },
+  { order: 123, title: "Worldly tapas", slug: "worldly-tapas", verses: [] },
+  {
+    order: 124,
+    title: "Churning of the heart",
+    slug: "churning-of-the-heart",
+    verses: [],
+  },
+  {
+    order: 125,
+    title: "Decision of dharma",
+    slug: "decision-of-dharma",
+    verses: [],
+  },
+  {
+    order: 126,
+    title: "Home as monastery",
+    slug: "home-as-monastery",
+    verses: [],
+  },
+  {
+    order: 127,
+    title: "Difficulty and diversity",
+    slug: "difficulty-and-diversity",
+    verses: [],
+  },
+  { order: 128, title: "Fate's writing", slug: "fates-writing", verses: [] },
+  { order: 129, title: "Birds' oath", slug: "birds-oath", verses: [] },
+  {
+    order: 130,
+    title: "Treatment of the self",
+    slug: "treatment-of-the-self",
+    verses: [],
+  },
+  {
+    order: 131,
+    title: "Don't bend the self",
+    slug: "dont-bend-the-self",
+    verses: [],
+  },
+  {
+    order: 132,
+    title: "Humility only in name",
+    slug: "humility-only-in-name",
+    verses: [],
+  },
+  {
+    order: 133,
+    title: "Destruction of pride",
+    slug: "destruction-of-pride",
+    verses: [],
+  },
+  { order: 134, title: "Two accounts", slug: "two-accounts", verses: [] },
+  {
+    order: 135,
+    title: "The end is a blessing",
+    slug: "the-end-is-a-blessing",
+    verses: [],
+  },
+  {
+    order: 136,
+    title: "Interests are limited",
+    slug: "interests-are-limited",
+    verses: [],
+  },
+  { order: 137, title: "Wise elder", slug: "wise-elder", verses: [] },
+  {
+    order: 138,
+    title: "Forgetfulness is divine grace",
+    slug: "forgetfulness-is-divine-grace",
+    verses: [],
+  },
+  {
+    order: 139,
+    title: "Solely the conscience",
+    slug: "solely-the-conscience",
+    verses: [],
+  },
+  { order: 140, title: "Third eye", slug: "third-eye", verses: [] },
+  { order: 141, title: "Two rooms", slug: "two-rooms", verses: [] },
+  { order: 142, title: "Bharata", slug: "bharata", verses: [] },
+  {
+    order: 143,
+    title: "Dharma is effortless expression",
+    slug: "dharma-is-effortless-expression",
+    verses: [],
+  },
+  {
+    order: 144,
+    title: "Four kinds of tapas",
+    slug: "four-kinds-of-tapas",
+    verses: [],
+  },
+  {
+    order: 145,
+    title: "You are a messenger",
+    slug: "you-are-a-messenger",
+    verses: [],
+  },
+  {
+    order: 146,
+    title: "Path of the bird",
+    slug: "path-of-the-bird",
+    verses: [],
+  },
+  {
+    order: 147,
+    title: "Invisible commander",
+    slug: "invisible-commander",
+    verses: [],
+  },
+  { order: 148, title: "Skill of life", slug: "skill-of-life", verses: [] },
+  { order: 149, title: "Saintly grass", slug: "saintly-grass", verses: [] },
+  {
+    order: 150,
+    title: "Principal and interest",
+    slug: "principal-and-interest",
+    verses: [],
+  },
+  {
+    order: 151,
+    title: "Kingly qualities",
+    slug: "kingly-qualities",
+    verses: [],
+  },
+  { order: 152, title: "Meru", slug: "meru", verses: [] },
+  { order: 153, title: "Great devotees", slug: "great-devotees", verses: [] },
+  { order: 154, title: "Three opinions", slug: "three-opinions", verses: [] },
+  {
+    order: 155,
+    title: "Traits of a guru",
+    slug: "traits-of-a-guru",
+    verses: [],
+  },
+  {
+    order: 156,
+    title: "Time has a share",
+    slug: "time-has-a-share",
+    verses: [],
+  },
+  {
+    order: 157,
+    title: "Calming the senses",
+    slug: "calming-the-senses",
+    verses: [],
+  },
+  {
+    order: 158,
+    title: "World is a temple",
+    slug: "world-is-a-temple",
+    verses: [],
+  },
+  {
+    order: 159,
+    title: "Freedom from bondage",
+    slug: "freedom-from-bondage",
+    verses: [],
+  },
+  {
+    order: 160,
+    title: "Coveted position",
+    slug: "coveted-position",
+    verses: [],
+  },
+  {
+    order: 161,
+    title: "Life is the soul of birth",
+    slug: "life-is-the-soul-of-birth",
+    verses: [],
+  },
+  { order: 162, title: "Harmony", slug: "harmony", verses: [] },
+  { order: 163, title: "Heart of life", slug: "heart-of-life", verses: [] },
+  {
+    order: 164,
+    title: "Third shareholder",
+    slug: "third-shareholder",
+    verses: [],
+  },
+  { order: 165, title: "Art of life", slug: "art-of-life", verses: [] },
+  {
+    order: 166,
+    title: "Dirt makes us conscious of cleanliness",
+    slug: "dirt-makes-us-conscious-of-cleanliness",
+    verses: [],
+  },
+  { order: 167, title: "Fear of death", slug: "fear-of-death", verses: [] },
+  { order: 168, title: "Under current", slug: "under-current", verses: [] },
+  {
+    order: 169,
+    title: "Don't call yourself a guru",
+    slug: "dont-call-yourself-a-guru",
+    verses: [],
+  },
+  { order: 170, title: "World-dance", slug: "world-dance", verses: [] },
+  {
+    order: 171,
+    title: "Universal growth",
+    slug: "universal-growth",
+    verses: [],
+  },
+  {
+    order: 172,
+    title: "Humans and nature",
+    slug: "humans-and-nature",
+    verses: [],
+  },
+  {
+    order: 173,
+    title: "Fire ends as ashes",
+    slug: "fire-ends-as-ashes",
+    verses: [],
+  },
+  {
+    order: 174,
+    title: "Well-meaning prudence",
+    slug: "well-meaning-prudence",
+    verses: [],
+  },
+  {
+    order: 175,
+    title: "Don't destroy the foundation",
+    slug: "dont-destroy-the-foundation",
+    verses: [],
+  },
+  { order: 176, title: "Prosperity", slug: "prosperity", verses: [] },
+  { order: 177, title: "A≈õvattha", slug: "avattha", verses: [] },
+  {
+    order: 178,
+    title: "Complete happiness",
+    slug: "complete-happiness",
+    verses: [],
+  },
+  { order: 179, title: "Symbolic world", slug: "symbolic-world", verses: [] },
+  {
+    order: 180,
+    title: "Longing for liberation",
+    slug: "longing-for-liberation",
+    verses: [],
+  },
+  {
+    order: 181,
+    title: "Purifying oneself",
+    slug: "purifying-oneself",
+    verses: [],
+  },
+  {
+    order: 182,
+    title: "Enjoy with detachment",
+    slug: "enjoy-with-detachment",
+    verses: [],
+  },
+  {
+    order: 183,
+    title: "Laugh and make others laugh",
+    slug: "laugh-and-make-others-laugh",
+    verses: [],
+  },
+  {
+    order: 184,
+    title: "My salutations to all",
+    slug: "my-salutations-to-all",
+    verses: [],
+  },
+  { order: 185, title: "Firewood", slug: "firewood", verses: [] },
+  { order: 186, title: "Death in sleep", slug: "death-in-sleep", verses: [] },
+  {
+    order: 187,
+    title: "Choice depends on the mind",
+    slug: "choice-depends-on-the-mind",
+    verses: [],
+  },
+  { order: 188, title: "Prayer", slug: "prayer", verses: [] },
+  { order: 189, title: "Surrender", slug: "surrender", verses: [] },
+];
+
+const kagga: KaggaProps[] = kaggaData.map((item) => ({
+  ...item,
+  id: uuidv4(),
+}));
+
+// Generate sorted slugs
+export const sortedSlugs = kagga
+  .sort((a, b) => a.order - b.order) // Sort by order
+  .map((item) => item.slug);
+
+export default kagga;

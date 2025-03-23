@@ -1,3 +1,4 @@
+import kagga from "@/api/kagga";
 import { allPosts } from "contentlayer/generated";
 import Link from "next/link";
 import { useMemo } from "react";
@@ -37,6 +38,31 @@ export default function Home() {
       <div className="min-h-screen mx-auto max-w-7xl snap-center snap-always">
         <div className="px-5">
           <PostsList posts={sortedPosts} />
+        </div>
+        <div className="px-5 py-10 cursor-not-allowed">
+          <p className="text-neutral-400 font-bold text-3xl">WIP</p>
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5">
+            {kagga.map((kagga) => (
+              <li
+                className="flex items-baseline justify-between"
+                key={kagga.id}
+              >
+                <p
+                  //   href={`/kagga/${kagga.slug}`}
+                  //   className="text-lg font-medium truncate hover:text-red-700"
+                  className="text-lg font-medium truncate text-neutral-400"
+                >
+                  {kagga.title}
+                </p>
+
+                {/* <div className="flex gap-0.5 font-medium tracking-wider text-red-700">
+                  <p>{kagga.verses[0].page}</p>
+                  <p>—</p>
+                  <p>{kagga.verses[kagga.verses.length - 1].page}</p>
+                </div> */}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
