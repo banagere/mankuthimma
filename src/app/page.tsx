@@ -23,7 +23,7 @@ export default function Home() {
                   {kagga.title}
                 </Link>
 
-                <div className="flex gap-0.5 font-medium tracking-wider text-red-700">
+                <div className="flex gap-0.5 font-medium text-red-700">
                   <p>{kagga.verses[0]?.number}</p>
                   <p>—</p>
                   <p>{kagga.verses[kagga.verses.length - 1]?.number}</p>
