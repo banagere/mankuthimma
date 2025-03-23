@@ -10,11 +10,9 @@ import kagga, { sortedSlugs } from "@/api/kagga";
 export default function KaggaPage() {
   const { slug } = useParams() as { slug: string };
 
-  // Find the kagga by slug
   const kaggaItem = kagga.find((k) => k.slug === slug);
   if (!kaggaItem) return <p>Not Found</p>;
 
-  // Determine previous and next slugs
   const currentIndex = sortedSlugs.indexOf(slug);
   const prevSlug = currentIndex > 0 ? sortedSlugs[currentIndex - 1] : null;
   const nextSlug =
@@ -33,11 +31,18 @@ export default function KaggaPage() {
           <p>{kaggaItem.verses[kaggaItem.verses.length - 1].number}</p>
         </div>
         {kaggaItem.verses.map((verse) => (
-          <div key={verse.number} className="mt-4">
+          <div key={verse.number} className="mt-6">
             <h2 className="text-2xl font-bold">{verse.number}</h2>
-            <p className="text-lg">{verse.kannada}</p>
-            <p className="text-sm text-gray-600">{verse.kannada_explanation}</p>
-            <p className="text-sm text-gray-800">{verse.english_explanation}</p>
+            <p className="py-2 leading-7">
+              {verse.kannada.split("\n").map((line, index) => (
+                <span key={index}>
+                  {line}
+                  <br />
+                </span>
+              ))}
+            </p>
+            <p className="py-2 leading-7">{verse.kannada_explanation}</p>
+            <p className="py-2 leading-7">{verse.english_explanation}</p>
           </div>
         ))}
       </article>

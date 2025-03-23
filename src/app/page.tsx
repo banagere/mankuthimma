@@ -1,7 +1,7 @@
-import kagga from "@/api/kagga";
 import { allPosts } from "contentlayer/generated";
 import Link from "next/link";
 import { useMemo } from "react";
+import kagga from "@/api/kagga";
 
 const paragraph = "font-medium py-4 text-2xl";
 
@@ -55,11 +55,12 @@ export default function Home() {
                   {kagga.title}
                 </p>
 
-                {/* <div className="flex gap-0.5 font-medium tracking-wider text-red-700">
-                  <p>{kagga.verses[0].page}</p>
+                {/* <div className="flex gap-0.5 font-medium tracking-wider text-red-700"> */}
+                <div className="flex gap-0.5 font-medium tracking-wider text-red-700/50">
+                  <p>{kagga.verses[0]?.number}</p>
                   <p>—</p>
-                  <p>{kagga.verses[kagga.verses.length - 1].page}</p>
-                </div> */}
+                  <p>{kagga.verses[kagga.verses.length - 1]?.number}</p>
+                </div>
               </li>
             ))}
           </ul>
