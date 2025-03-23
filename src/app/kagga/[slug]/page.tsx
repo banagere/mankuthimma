@@ -49,7 +49,7 @@ export default function KaggaPage() {
               ))}
             </p>
             <p className="py-2 leading-7">{verse.kannada_explanation}</p>
-            <p className="py-2 leading-7">{verse.english_explanation}</p>
+            {/* <p className="py-2 leading-7">{verse.english_explanation}</p> */}
           </div>
         ))}
       </article>

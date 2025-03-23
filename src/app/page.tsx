@@ -1,43 +1,9 @@
-import { allPosts } from "contentlayer/generated";
 import Link from "next/link";
-import { useMemo } from "react";
 import kagga from "@/api/kagga";
 
 const paragraph = "font-medium py-4 text-2xl";
 
-function PostsList({ posts }) {
-  return (
-    <>
-      <p className="text-neutral-400 font-bold text-3xl">WIP</p>
-      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5">
-        {posts.map(({ slug, title, number }) => (
-          <li className="flex items-baseline justify-between" key={slug}>
-            <p
-              //   href={`/kagga/${slug}`}
-              className="text-lg font-medium truncate text-neutral-400"
-            >
-              {title}
-            </p>
-            <p className="font-medium tracking-wider text-red-700/50">
-              {number}
-            </p>
-          </li>
-        ))}
-      </ul>
-    </>
-  );
-}
-
 export default function Home() {
-  const sortedPosts = useMemo(
-    () => allPosts?.sort((a, b) => a.weight - b.weight) ?? [],
-    []
-  );
-
-  if (!sortedPosts.length) {
-    return <p>No posts found.</p>;
-  }
-
   return (
     <div className="snap-y snap-mandatory">
       <div className="min-h-screen mx-auto max-w-7xl snap-center snap-always">
@@ -52,13 +18,11 @@ export default function Home() {
                 <Link
                   href={`/kagga/${kagga.slug}`}
                   className="text-lg font-medium truncate hover:text-red-700"
-                  //   className="text-lg font-medium truncate text-neutral-400"
                 >
                   {kagga.title}
                 </Link>
 
-                {/* <div className="flex gap-0.5 font-medium tracking-wider text-red-700"> */}
-                <div className="flex gap-0.5 font-medium tracking-wider text-red-700/50">
+                <div className="flex gap-0.5 font-medium tracking-wider text-red-700">
                   <p>{kagga.verses[0]?.number}</p>
                   <p>—</p>
                   <p>{kagga.verses[kagga.verses.length - 1]?.number}</p>
@@ -66,10 +30,6 @@ export default function Home() {
               </li>
             ))}
           </ul>
-        </div>
-
-        <div className="px-5 py-10 cursor-not-allowed">
-          <PostsList posts={sortedPosts} />
         </div>
       </div>
 
