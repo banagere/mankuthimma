@@ -3,6 +3,8 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import kagga, { sortedSlugs } from "@/api/kagga";
+import { Suspense } from "react";
+import ViewCounter from "@/components/view-counter";
 
 interface NavigationLinksProps {
   prevSlug?: string | null;
@@ -10,7 +12,6 @@ interface NavigationLinksProps {
 }
 
 // metadata missing
-// add view counter
 
 export default function KaggaPage() {
   const { slug } = useParams() as { slug: string };
@@ -32,10 +33,15 @@ export default function KaggaPage() {
       <NavigationLinks prevSlug={prevSlug} nextSlug={nextSlug} />
       <article className="max-w-xl mx-auto text-center">
         <h1 className="text-2xl font-bold">{kaggaItem.title}</h1>
-        <div className="pb-5 font-semibold tracking-wider text-red-700 flex gap-0.5 justify-center">
-          <p>{kaggaItem.verses[0]?.number}</p>
-          <p>—</p>
-          <p>{kaggaItem.verses[kaggaItem.verses.length - 1]?.number}</p>
+        <div className="pb-5 font-semibold tracking-wider text-red-700 justify-center flex gap-1">
+          <div className="flex gap-0.5">
+            <p>{kaggaItem.verses[0]?.number}</p>
+            <p>—</p>
+            <p>{kaggaItem.verses[kaggaItem.verses.length - 1]?.number}</p>
+          </div>
+          <Suspense fallback={<span className="opacity-0">Loading...</span>}>
+            <ViewCounter slug={kaggaItem.slug} />
+          </Suspense>
         </div>
         {kaggaItem.verses.map((verse) => (
           <div key={verse.number} className="mt-6">
