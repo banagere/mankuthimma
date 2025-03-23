@@ -4,6 +4,11 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import kagga, { sortedSlugs } from "@/api/kagga";
 
+interface NavigationLinksProps {
+  prevSlug?: string | null;
+  nextSlug?: string | null;
+}
+
 // metadata missing
 // add view counter
 
@@ -45,7 +50,7 @@ export default function KaggaPage() {
   );
 }
 
-function NavigationLinks({ prevSlug, nextSlug }) {
+function NavigationLinks({ prevSlug, nextSlug }: NavigationLinksProps) {
   return (
     <div className="flex justify-between mb-2">
       {prevSlug && (

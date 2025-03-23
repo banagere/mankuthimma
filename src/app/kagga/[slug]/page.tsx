@@ -1,25 +1,25 @@
+"use client";
+
+import { useParams } from "next/navigation";
 import Link from "next/link";
-import { allPosts } from "contentlayer/generated";
-import { notFound } from "next/navigation";
-import { Mdx } from "@/components/mdx";
-import { Metadata } from "next";
-import { Suspense } from "react";
-import ViewCounter from "@/components/view-counter";
+import kagga, { sortedSlugs } from "@/api/kagga";
 
-// Precompute sorted slugs and posts map
-const sortedSlugs = allPosts
-  .sort((a, b) => (a.weight ?? 0) - (b.weight ?? 0))
-  .map((post) => post.slug);
-const postsBySlug = new Map(allPosts.map((post) => [post.slug, post]));
+interface NavigationLinksProps {
+  prevSlug?: string | null;
+  nextSlug?: string | null;
+}
 
-export default function Kagga({ params }) {
-  const { slug } = params;
-  const post = postsBySlug.get(slug);
+// metadata missing
+// add view counter
 
-  if (!post) {
-    notFound();
-  }
+export default function KaggaPage() {
+  const { slug } = useParams() as { slug: string };
 
+  // Find the kagga by slug
+  const kaggaItem = kagga.find((k) => k.slug === slug);
+  if (!kaggaItem) return <p>Not Found</p>;
+
+  // Determine previous and next slugs
   const currentIndex = sortedSlugs.indexOf(slug);
   const prevSlug = currentIndex > 0 ? sortedSlugs[currentIndex - 1] : null;
   const nextSlug =
@@ -31,20 +31,33 @@ export default function Kagga({ params }) {
     <div className="px-5 pb-10 mx-auto max-w-7xl">
       <NavigationLinks prevSlug={prevSlug} nextSlug={nextSlug} />
       <article className="max-w-xl mx-auto text-center">
-        <h1 className="text-2xl font-semibold">{post.title}</h1>
-        <p className="pb-5 font-semibold tracking-wider text-red-700">
-          {post.number}
-          <Suspense fallback={<span className="opacity-0">Loading...</span>}>
-            <ViewCounter slug={post.slug} />
-          </Suspense>
-        </p>
-        <Mdx code={post.body.code} />
+        <h1 className="text-2xl font-bold">{kaggaItem.title}</h1>
+        <div className="pb-5 font-semibold tracking-wider text-red-700 flex gap-0.5 justify-center">
+          <p>{kaggaItem.verses[0]?.number}</p>
+          <p>—</p>
+          <p>{kaggaItem.verses[kaggaItem.verses.length - 1]?.number}</p>
+        </div>
+        {kaggaItem.verses.map((verse) => (
+          <div key={verse.number} className="mt-6">
+            <h2 className="text-2xl font-bold">{verse.number}</h2>
+            <p className="py-2 leading-7">
+              {verse.kannada.split("\n").map((line, index) => (
+                <span key={index}>
+                  {line}
+                  <br />
+                </span>
+              ))}
+            </p>
+            <p className="py-2 leading-7">{verse.kannada_explanation}</p>
+            <p className="py-2 leading-7">{verse.english_explanation}</p>
+          </div>
+        ))}
       </article>
     </div>
   );
 }
 
-function NavigationLinks({ prevSlug, nextSlug }) {
+function NavigationLinks({ prevSlug, nextSlug }: NavigationLinksProps) {
   return (
     <div className="flex justify-between mb-2">
       {prevSlug && (
@@ -65,32 +78,4 @@ function NavigationLinks({ prevSlug, nextSlug }) {
       )}
     </div>
   );
-}
-
-export async function generateMetadata({
-  params,
-}): Promise<Metadata | undefined> {
-  const post = postsBySlug.get(params.slug);
-  if (!post) return;
-
-  const meta = {
-    title: "Mankuthimmana Kagga",
-    description:
-      "An accessible repository for the people who love Mankuthimmana Kagga, written by DV Gundappa.",
-    url: "https://mankuthimma.com",
-  };
-
-  return {
-    title: post.title,
-    openGraph: {
-      title: post.title,
-      type: "article",
-      url: `${meta.url}/kagga/${post.slug}`,
-      images: `${meta.url}/opengraph-image.jpg`,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: post.title,
-    },
-  };
 }

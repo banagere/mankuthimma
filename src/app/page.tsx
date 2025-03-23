@@ -7,19 +7,24 @@ const paragraph = "font-medium py-4 text-2xl";
 
 function PostsList({ posts }) {
   return (
-    <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5">
-      {posts.map(({ slug, title, number }) => (
-        <li className="flex items-baseline justify-between" key={slug}>
-          <Link
-            href={`/kagga/${slug}`}
-            className="text-lg font-medium truncate hover:text-red-700"
-          >
-            {title}
-          </Link>
-          <p className="font-medium tracking-wider text-red-700">{number}</p>
-        </li>
-      ))}
-    </ul>
+    <>
+      <p className="text-neutral-400 font-bold text-3xl">WIP</p>
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5">
+        {posts.map(({ slug, title, number }) => (
+          <li className="flex items-baseline justify-between" key={slug}>
+            <p
+              //   href={`/kagga/${slug}`}
+              className="text-lg font-medium truncate text-neutral-400"
+            >
+              {title}
+            </p>
+            <p className="font-medium tracking-wider text-red-700/50">
+              {number}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }
 
@@ -36,10 +41,7 @@ export default function Home() {
   return (
     <div className="snap-y snap-mandatory">
       <div className="min-h-screen mx-auto max-w-7xl snap-center snap-always">
-        <div className="px-5">
-          <PostsList posts={sortedPosts} />
-        </div>
-        <div className="px-5 py-10 cursor-not-allowed">
+        <div className="px-5 pb-10">
           <p className="text-neutral-400 font-bold text-3xl">WIP</p>
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5">
             {kagga.map((kagga) => (
@@ -47,13 +49,13 @@ export default function Home() {
                 className="flex items-baseline justify-between"
                 key={kagga.id}
               >
-                <p
-                  //   href={`/kagga/${kagga.slug}`}
-                  //   className="text-lg font-medium truncate hover:text-red-700"
-                  className="text-lg font-medium truncate text-neutral-400"
+                <Link
+                  href={`/kagga/${kagga.slug}`}
+                  className="text-lg font-medium truncate hover:text-red-700"
+                  //   className="text-lg font-medium truncate text-neutral-400"
                 >
                   {kagga.title}
-                </p>
+                </Link>
 
                 {/* <div className="flex gap-0.5 font-medium tracking-wider text-red-700"> */}
                 <div className="flex gap-0.5 font-medium tracking-wider text-red-700/50">
@@ -64,6 +66,10 @@ export default function Home() {
               </li>
             ))}
           </ul>
+        </div>
+
+        <div className="px-5 py-10 cursor-not-allowed">
+          <PostsList posts={sortedPosts} />
         </div>
       </div>
 

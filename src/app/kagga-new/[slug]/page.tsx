@@ -1,8 +1,9 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import Link from "next/link";
-import kagga, { sortedSlugs } from "@/api/kagga";
+// import Link from "next/link";
+// import kagga, { sortedSlugs } from "@/api/kagga";
+import kagga from "@/api/kagga";
 
 // metadata missing
 // add view counter
@@ -13,16 +14,16 @@ export default function KaggaPage() {
   const kaggaItem = kagga.find((k) => k.slug === slug);
   if (!kaggaItem) return <p>Not Found</p>;
 
-  const currentIndex = sortedSlugs.indexOf(slug);
-  const prevSlug = currentIndex > 0 ? sortedSlugs[currentIndex - 1] : null;
-  const nextSlug =
-    currentIndex < sortedSlugs.length - 1
-      ? sortedSlugs[currentIndex + 1]
-      : null;
+  //   const currentIndex = sortedSlugs.indexOf(slug);
+  //   const prevSlug = currentIndex > 0 ? sortedSlugs[currentIndex - 1] : null;
+  //   const nextSlug =
+  //     currentIndex < sortedSlugs.length - 1
+  //       ? sortedSlugs[currentIndex + 1]
+  //       : null;
 
   return (
     <div className="px-5 pb-10 mx-auto max-w-7xl">
-      <NavigationLinks prevSlug={prevSlug} nextSlug={nextSlug} />
+      {/* <NavigationLinks prevSlug={prevSlug} nextSlug={nextSlug} /> */}
       <article className="max-w-xl mx-auto text-center">
         <h1 className="text-2xl font-bold">{kaggaItem.title}</h1>
         <div className="pb-5 font-semibold tracking-wider text-red-700 flex gap-0.5 justify-center">
@@ -50,25 +51,25 @@ export default function KaggaPage() {
   );
 }
 
-function NavigationLinks({ prevSlug, nextSlug }) {
-  return (
-    <div className="flex justify-between mb-2">
-      {prevSlug && (
-        <Link
-          href={`/kagga/${prevSlug}`}
-          className="duration-500 hover:opacity-70"
-        >
-          &larr; Previous
-        </Link>
-      )}
-      {nextSlug && (
-        <Link
-          href={`/kagga/${nextSlug}`}
-          className="duration-500 hover:opacity-70"
-        >
-          Next &rarr;
-        </Link>
-      )}
-    </div>
-  );
-}
+// function NavigationLinks({ prevSlug, nextSlug }) {
+//   return (
+//     <div className="flex justify-between mb-2">
+//       {prevSlug && (
+//         <Link
+//           href={`/kagga/${prevSlug}`}
+//           className="duration-500 hover:opacity-70"
+//         >
+//           &larr; Previous
+//         </Link>
+//       )}
+//       {nextSlug && (
+//         <Link
+//           href={`/kagga/${nextSlug}`}
+//           className="duration-500 hover:opacity-70"
+//         >
+//           Next &rarr;
+//         </Link>
+//       )}
+//     </div>
+//   );
+// }

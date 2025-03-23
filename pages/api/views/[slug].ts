@@ -1,17 +1,33 @@
-// api/views/[slug].js or a similar API route
+// import { kv } from "@vercel/kv";
+
+// export default async function handler(req, res) {
+//   const { slug } = req.query;
+
+//   if (!slug) {
+//     return res.status(400).json({ error: "Slug is required" });
+//   }
+
+//   const key = `views-${slug}`;
+//   const views = await kv.incr(key);
+
+//   res.status(200).json({ views });
+// }
+
+import { NextApiRequest, NextApiResponse } from "next";
 import { kv } from "@vercel/kv";
 
-export default async function handler(req, res) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { slug } = req.query;
 
-  // Ensure the slug is valid
-  if (!slug) {
+  if (!slug || typeof slug !== "string") {
     return res.status(400).json({ error: "Slug is required" });
   }
 
-  const key = `views-${slug}`; // Prefixing the key to avoid collisions
-  const views = await kv.incr(key); // Increment the view count for this slug
+  const key = `views-${slug}`;
+  const views = await kv.incr(key);
 
-  // Return the updated view count
   res.status(200).json({ views });
 }
