@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from "react";
 
-export default function ViewCounter({ slug }) {
-  const [views, setViews] = useState();
+export default function ViewCounter({ slug }: { slug: string }) {
+  const [views, setViews] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    // Function to fetch the view count
     const fetchViews = async () => {
       const response = await fetch(`/api/views/${slug}`);
       if (response.ok) {
@@ -16,9 +15,8 @@ export default function ViewCounter({ slug }) {
     };
 
     fetchViews();
-  }, [slug]); // Re-fetch if the slug changes
+  }, [slug]);
 
-  // Only render the view count if it has been set
   return views !== undefined ? (
     <>
       {" • "}
