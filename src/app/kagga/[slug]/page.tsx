@@ -2,11 +2,10 @@
 
 import { useParams } from "next/navigation";
 import Link from "next/link";
-// import kagga, { sortedSlugs } from "@/api/kagga";
 import { Suspense } from "react";
 import ViewCounter from "@/components/view-counter";
 import kagga from "@/api/verses";
-import chapter from "@/api/chapters";
+import chapter, { sortedSlugs } from "@/api/chapters";
 
 interface NavigationLinksProps {
   prevSlug?: string | null;
@@ -32,17 +31,17 @@ export default function KaggaPage() {
     verses: kagga.filter((k) => chapterItem.verses.includes(k.number)),
   };
 
-  // Determine previous and next slugs
-  //   const currentIndex = sortedSlugs.indexOf(slug);
-  //   const prevSlug = currentIndex > 0 ? sortedSlugs[currentIndex - 1] : null;
-  //   const nextSlug =
-  //     currentIndex < sortedSlugs.length - 1
-  //       ? sortedSlugs[currentIndex + 1]
-  //       : null;
+  //   Determine previous and next slugs
+  const currentIndex = sortedSlugs.indexOf(slug);
+  const prevSlug = currentIndex > 0 ? sortedSlugs[currentIndex - 1] : null;
+  const nextSlug =
+    currentIndex < sortedSlugs.length - 1
+      ? sortedSlugs[currentIndex + 1]
+      : null;
 
   return (
     <div className="px-5 pb-32 mx-auto max-w-7xl">
-      {/* <NavigationLinks prevSlug={prevSlug} nextSlug={nextSlug} /> */}
+      <NavigationLinks prevSlug={prevSlug} nextSlug={nextSlug} />
       <article className="max-w-xl mx-auto text-center">
         <h1 className="text-2xl font-bold">{kaggaItem.title}</h1>
         <div className="pb-5 font-semibold tracking-wider text-red-700 justify-center flex gap-1">

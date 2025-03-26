@@ -8,8 +8,6 @@ export default function Home() {
     <div className="snap-y snap-mandatory">
       <div className="min-h-screen mx-auto max-w-7xl snap-center snap-always">
         <div className="px-5 pb-10">
-          <p className="font-black text-4xl">WIP</p>
-
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5">
             {chapter.map((chap) => (
               <li className="flex items-baseline justify-between" key={chap.id}>
