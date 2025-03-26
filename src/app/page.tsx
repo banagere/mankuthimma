@@ -1,5 +1,5 @@
 import Link from "next/link";
-import kagga from "@/api/kagga";
+import chapter from "@/api/chapters";
 
 const paragraph = "font-medium py-4 text-2xl";
 
@@ -11,22 +11,19 @@ export default function Home() {
           <p className="font-black text-4xl">WIP</p>
 
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5">
-            {kagga.map((kagga) => (
-              <li
-                className="flex items-baseline justify-between"
-                key={kagga.id}
-              >
+            {chapter.map((chap) => (
+              <li className="flex items-baseline justify-between" key={chap.id}>
                 <Link
-                  href={`/kagga/${kagga.slug}`}
+                  href={`/kagga/${chap.slug}`}
                   className="text-lg font-medium truncate hover:text-red-700"
                 >
-                  {kagga.title}
+                  {chap.title}
                 </Link>
 
                 <div className="flex gap-0.5 font-medium text-red-700">
-                  <p>{kagga.verses[0]?.number}</p>
+                  <p>{chap.verses[0]}</p>
                   <p>—</p>
-                  <p>{kagga.verses[kagga.verses.length - 1]?.number}</p>
+                  <p>{chap.verses[chap.verses.length - 1]}</p>
                 </div>
               </li>
             ))}

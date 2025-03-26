@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 // import Link from "next/link";
 // import kagga, { sortedSlugs } from "@/api/kagga";
-import kagga from "@/api/kagga";
+// import kagga from "@/api/kagga";
 
 // metadata missing
 // add view counter
@@ -11,8 +11,8 @@ import kagga from "@/api/kagga";
 export default function KaggaPage() {
   const { slug } = useParams() as { slug: string };
 
-  const kaggaItem = kagga.find((k) => k.slug === slug);
-  if (!kaggaItem) return <p>Not Found</p>;
+//   const kaggaItem = kagga.find((k) => k.slug === slug);
+//   if (!kaggaItem) return <p>Not Found</p>;
 
   //   const currentIndex = sortedSlugs.indexOf(slug);
   //   const prevSlug = currentIndex > 0 ? sortedSlugs[currentIndex - 1] : null;
@@ -25,13 +25,13 @@ export default function KaggaPage() {
     <div className="px-5 pb-10 mx-auto max-w-7xl">
       {/* <NavigationLinks prevSlug={prevSlug} nextSlug={nextSlug} /> */}
       <article className="max-w-xl mx-auto text-center">
-        <h1 className="text-2xl font-bold">{kaggaItem.title}</h1>
+        {/* <h1 className="text-2xl font-bold">{kaggaItem.title}</h1>
         <div className="pb-5 font-semibold tracking-wider text-red-700 flex gap-0.5 justify-center">
           <p>{kaggaItem.verses[0].number}</p>
           <p>—</p>
           <p>{kaggaItem.verses[kaggaItem.verses.length - 1].number}</p>
-        </div>
-        {kaggaItem.verses.map((verse) => (
+        </div> */}
+        {/* {kaggaItem.verses.map((verse) => (
           <div key={verse.number} className="mt-6">
             <h2 className="text-2xl font-bold">{verse.number}</h2>
             <p className="py-2 leading-7">
@@ -45,7 +45,7 @@ export default function KaggaPage() {
             <p className="py-2 leading-7">{verse.kannada_explanation}</p>
             <p className="py-2 leading-7">{verse.english_explanation}</p>
           </div>
-        ))}
+        ))} */}
       </article>
     </div>
   );
