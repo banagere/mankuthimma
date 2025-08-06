@@ -42,7 +42,7 @@ const meta = {
   title: "Mankuthimmana Kagga",
   description:
     "An accessible repository for the people who love Mankuthimmana Kagga, written by DV Gundappa.",
-  url: "https://mankuthimma.com",
+  url: "https://mankuthimma.in",
 };
 
 export const metadata: Metadata = {

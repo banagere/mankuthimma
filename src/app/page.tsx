@@ -38,10 +38,10 @@ export default function Home() {
             "The content for this site was sourced from books and websites, with full credit to the original authors and publishers. I earn no money from this and did it out of gratitude for DVG's craft.",
             "If you love what you read, consider purchasing the book to support the people who helped bring DVG’s work to life.",
             <>
-              This website&apos;s code is publicly accessible. If
-              you&apos;d like to check it, visit{" "}
+              This website&apos;s code is publicly accessible. If you&apos;d
+              like to check it, visit{" "}
               <Link
-                href="https://github.com/banagere/mankuthimma.com"
+                href="https://github.com/banagere/mankuthimma"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Github (opens in a new tab)"

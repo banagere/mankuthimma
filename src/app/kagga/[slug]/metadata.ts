@@ -18,7 +18,7 @@ export async function generateMetadata({
   const meta = {
     title: chapterItem.title,
     description: `Explore the verses of "${chapterItem.title}" from Mankuthimmana Kagga.`,
-    url: "https://mankuthimma.com",
+    url: "https://mankuthimma.in",
   };
 
   return {
