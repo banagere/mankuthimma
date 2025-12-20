@@ -15,7 +15,7 @@
     "@vercel/kv": "^3.0.0",
     "@vercel/speed-insights": "^1.2.0",
     "lightningcss": "^1.30.2",
-    "next": "^15.5.4",
+    "next": "15.5.9",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "uuid": "^13.0.0"
