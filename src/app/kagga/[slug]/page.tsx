@@ -66,7 +66,9 @@ export default function KaggaPage() {
               ))}
             </p>
             <p className="py-2 leading-7">{verse.kannada_explanation}</p>
-            {/* <p className="py-2 leading-7">{verse.english_explanation}</p> */}
+            {verse.delete && (
+              <p className="py-2 leading-7 text-neutral-600">{verse.delete}</p>
+            )}
           </div>
         ))}
       </article>
