@@ -1,0 +1,94 @@
+"use client";
+
+import Link from "next/link";
+import { Suspense } from "react";
+import ViewCounter from "@/components/view-counter";
+import kagga from "@/api/verses";
+import chapter, { sortedSlugs } from "@/api/chapters";
+
+interface NavigationLinksProps {
+  prevSlug?: string | null;
+  nextSlug?: string | null;
+}
+
+export default function ChapterContent({ slug }: { slug: string }) {
+  const chapterItem = chapter.find((chap) => chap.slug === slug);
+  if (!chapterItem)
+    return (
+      <p className="flex justify-center font-medium text-2xl">
+        Chapter not found :(
+      </p>
+    );
+
+  const kaggaItem = {
+    title: chapterItem.title,
+    slug: chapterItem.slug,
+    verses: kagga.filter((k) => chapterItem.verses.includes(k.number)),
+  };
+
+  const currentIndex = sortedSlugs.indexOf(slug);
+  const prevSlug = currentIndex > 0 ? sortedSlugs[currentIndex - 1] : null;
+  const nextSlug =
+    currentIndex < sortedSlugs.length - 1
+      ? sortedSlugs[currentIndex + 1]
+      : null;
+
+  return (
+    <div className="px-5 pb-32 mx-auto max-w-7xl min-h-screen">
+      <NavigationLinks prevSlug={prevSlug} nextSlug={nextSlug} />
+      <article className="max-w-xl mx-auto text-center">
+        <h1 className="text-2xl font-bold">{kaggaItem.title}</h1>
+        <div className="pb-5 font-semibold tracking-wider text-red-700 justify-center flex gap-1">
+          <div className="flex gap-0.5">
+            <p>{kaggaItem.verses[0]?.number}</p>
+            <p>—</p>
+            <p>{kaggaItem.verses[kaggaItem.verses.length - 1]?.number}</p>
+          </div>
+          <Suspense fallback={<span className="opacity-0">Loading...</span>}>
+            <ViewCounter slug={kaggaItem.slug} />
+          </Suspense>
+        </div>
+        {kaggaItem.verses.map((verse) => (
+          <div key={verse.number} className="mt-6">
+            <h2 className="text-2xl font-bold">{verse.number}</h2>
+            <p className="py-2 leading-7">
+              {verse.kannada.split("\n").map((line, index) => (
+                <span key={index}>
+                  {line}
+                  <br />
+                </span>
+              ))}
+            </p>
+            <p className="py-2 leading-7">{verse.kannada_explanation}</p>
+            {verse.english && (
+              <p className="py-2 leading-7 text-neutral-600">{verse.english}</p>
+            )}
+          </div>
+        ))}
+      </article>
+    </div>
+  );
+}
+
+function NavigationLinks({ prevSlug, nextSlug }: NavigationLinksProps) {
+  return (
+    <div className="flex justify-between mb-2">
+      {prevSlug && (
+        <Link
+          href={`/kagga/${prevSlug}`}
+          className="transition-opacity hover:opacity-70"
+        >
+          &larr; Previous
+        </Link>
+      )}
+      {nextSlug && (
+        <Link
+          href={`/kagga/${nextSlug}`}
+          className="transition-opacity hover:opacity-70"
+        >
+          Next &rarr;
+        </Link>
+      )}
+    </div>
+  );
+}
