@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import chapter from "@/api/chapters";
+import site from "@/components/site";
 
 export async function generateMetadata({
   params,
@@ -18,7 +19,7 @@ export async function generateMetadata({
   const meta = {
     title: chapterItem.title,
     description: `Explore the verses of "${chapterItem.title}" from Mankuthimmana Kagga.`,
-    url: "https://mankuthimma.in",
+    url: site.website,
   };
 
   return {

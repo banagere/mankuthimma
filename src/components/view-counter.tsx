@@ -7,10 +7,14 @@ export default function ViewCounter({ slug }: { slug: string }) {
 
   useEffect(() => {
     const fetchViews = async () => {
-      const response = await fetch(`/api/views/${slug}`);
-      if (response.ok) {
-        const data = await response.json();
-        setViews(data.views);
+      try {
+        const response = await fetch(`/api/views/${slug}`, { method: "POST" });
+        if (response.ok) {
+          const data = await response.json();
+          setViews(data.views);
+        }
+      } catch {
+        // Silently fail — view count is non-critical
       }
     };
 
