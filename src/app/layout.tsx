@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 import Image from "next/image";
 import logo from "../../public/apple-touch-icon.png";
+import site from "@/components/site";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -16,7 +17,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body className="flex flex-col scroll-smooth selection:bg-black selection:text-white">
         <header className="">
           <div className="flex p-5 mx-auto max-w-7xl">
-            <Link href="/" className="duration-500 hover:opacity-80">
+            <Link href="/" className="transition-opacity hover:opacity-80">
               <Image
                 src={logo}
                 alt={"Kagga Logo"}
@@ -38,32 +39,25 @@ export default function RootLayout({ children }: RootLayoutProps) {
   );
 }
 
-const meta = {
-  title: "Mankuthimmana Kagga",
-  description:
-    "An accessible repository for the people who love Mankuthimmana Kagga, written by DV Gundappa.",
-  url: "https://mankuthimma.in",
-};
-
 export const metadata: Metadata = {
-  metadataBase: new URL(`${meta.url}`),
+  metadataBase: new URL(site.website),
   title: {
-    default: `${meta.title}`,
+    default: site.name,
     template: "%s",
   },
-  description: `${meta.description}`,
+  description: site.description,
   keywords: "DV Gundappa, Kagga, Kannada",
   openGraph: {
-    title: `${meta.title}`,
-    description: `${meta.description}`,
-    url: `${meta.url}`,
-    siteName: `${meta.title}`,
+    title: site.name,
+    description: site.description,
+    url: site.website,
+    siteName: site.name,
     images: [
       {
-        url: `${meta.url}/opengraph-image.jpg`,
+        url: `${site.website}/opengraph-image.jpg`,
         width: 1200,
         height: 630,
-        alt: `${meta.title}`,
+        alt: site.name,
       },
     ],
     locale: "en-IN",
@@ -81,43 +75,13 @@ export const metadata: Metadata = {
     },
   },
   twitter: {
-    title: `${meta.title}`,
+    title: site.name,
     card: "summary_large_image",
-    images: `${meta.url}/opengraph-image.jpg`,
-    site: `${meta.url}`,
-    description: `${meta.description}`,
+    images: `${site.website}/opengraph-image.jpg`,
+    site: site.website,
+    description: site.description,
   },
   icons: {
-    shortcut: `${meta.url}/favicon.ico`,
+    shortcut: `${site.website}/favicon.ico`,
   },
-  verification: {
-    // google: "qQhmLTwjNWYgQ7W42nSTq63xIrTch13X_11mmxBE9zk",
-    yandex: "",
-    other: {
-      // bing: "164551986DA47F7F6FC0D21A93FFFCA6",
-    },
-  },
-  // {
-  //   rel: "alternate",
-  //   href: "/feed.xml",
-  //   type: "application/rss+xml",
-  //   // @ts-ignore
-  //   title: `${config.siteName} (RSS)`,
-  // },
-  // {
-  //   rel: "alternate",
-  //   href: "/feed.atom",
-  //   type: "application/atom+xml",
-  //   // @ts-ignore
-  //   title: `${config.siteName} (Atom)`,
-  // },
-  // {
-  //   rel: "humans",
-  //   href: "/humans.txt",
-  // },
-  // {
-  //   rel: "pgpkey",
-  //   href: "/pubkey.asc",
-  //   type: "application/pgp-keys",
-  // },
 };

@@ -40,7 +40,7 @@ export default function KaggaPage() {
       : null;
 
   return (
-    <div className="px-5 pb-32 mx-auto max-w-7xl">
+    <div className="px-5 pb-32 mx-auto max-w-7xl min-h-screen">
       <NavigationLinks prevSlug={prevSlug} nextSlug={nextSlug} />
       <article className="max-w-xl mx-auto text-center">
         <h1 className="text-2xl font-bold">{kaggaItem.title}</h1>
@@ -80,7 +80,7 @@ function NavigationLinks({ prevSlug, nextSlug }: NavigationLinksProps) {
       {prevSlug && (
         <Link
           href={`/kagga/${prevSlug}`}
-          className="duration-500 hover:opacity-70"
+          className="transition-opacity hover:opacity-70"
         >
           &larr; Previous
         </Link>
@@ -88,7 +88,7 @@ function NavigationLinks({ prevSlug, nextSlug }: NavigationLinksProps) {
       {nextSlug && (
         <Link
           href={`/kagga/${nextSlug}`}
-          className="duration-500 hover:opacity-70"
+          className="transition-opacity hover:opacity-70"
         >
           Next &rarr;
         </Link>
