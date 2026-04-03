@@ -1,27 +1,24 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import ViewCounter from "@/components/view-counter";
 import kagga from "@/api/verses";
 import chapter, { sortedSlugs } from "@/api/chapters";
 
 interface NavigationLinksProps {
-  prevSlug?: string | null;
-  nextSlug?: string | null;
+  prevSlug: string | null;
+  nextSlug: string | null;
 }
 
 export default function ChapterContent({ slug }: { slug: string }) {
   const chapterItem = chapter.find((chap) => chap.slug === slug);
-  if (!chapterItem)
-    return (
-      <p className="flex justify-center font-medium text-2xl">
-        Chapter not found :(
-      </p>
-    );
+  if (!chapterItem) notFound();
 
+  const verseNumbers = new Set(chapterItem.verses);
   const kaggaItem = {
     title: chapterItem.title,
     slug: chapterItem.slug,
-    verses: kagga.filter((k) => chapterItem.verses.includes(k.number)),
+    verses: kagga.filter((k) => verseNumbers.has(k.number)),
   };
 
   const currentIndex = sortedSlugs.indexOf(slug);

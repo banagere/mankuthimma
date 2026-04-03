@@ -29,11 +29,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
           </div>
         </header>
 
-        <main>
-          {children}
-          <Analytics />
-          <SpeedInsights />
-        </main>
+        <main>{children}</main>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -1,13 +1,11 @@
-
 interface ChapterProps {
-  id: string;
   order: number;
   title: string;
   slug: string;
   verses: number[];
 }
 
-const chapterData: Omit<ChapterProps, "id">[] = [
+const chapterData: ChapterProps[] = [
   { order: 1, title: "Invocation", slug: "invocation", verses: [1, 2, 3] },
   {
     order: 2,
@@ -1139,13 +1137,8 @@ const chapterData: Omit<ChapterProps, "id">[] = [
   },
 ];
 
-const chapter: ChapterProps[] = chapterData.map((item) => ({
-  ...item,
-  id: item.slug,
-}));
-
-export const sortedSlugs = chapter
+export const sortedSlugs = chapterData
   .toSorted((a, b) => a.order - b.order)
   .map((item) => item.slug);
 
-export default chapter;
+export default chapterData;

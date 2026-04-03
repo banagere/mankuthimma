@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-/* eslint-disable react/no-unescaped-entities */
 export default function NotFound() {
   return (
     <div className="pt-10 text-xl text-center">

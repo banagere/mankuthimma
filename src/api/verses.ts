@@ -1,13 +1,11 @@
-
 interface KaggaProps {
-  id: string;
   number: number;
   kannada: string;
   kannada_explanation: string;
   english?: string;
 }
 
-const kaggaData: Omit<KaggaProps, "id">[] = [
+const kaggaData: KaggaProps[] = [
   {
     number: 1,
     english:
@@ -8513,12 +8511,4 @@ const kaggaData: Omit<KaggaProps, "id">[] = [
   },
 ];
 
-const kagga: KaggaProps[] = kaggaData.map((item) => ({
-  ...item,
-  id: String(item.number),
-}));
-
-// Generate sorted slugs
-export const sortedSlugs = kagga.toSorted((a, b) => a.number - b.number);
-
-export default kagga;
+export default kaggaData;
