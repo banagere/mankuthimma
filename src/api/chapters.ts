@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 
 interface ChapterProps {
   id: string;
@@ -1142,12 +1141,11 @@ const chapterData: Omit<ChapterProps, "id">[] = [
 
 const chapter: ChapterProps[] = chapterData.map((item) => ({
   ...item,
-  id: uuidv4(),
+  id: item.slug,
 }));
 
-// Generate sorted slugs
 export const sortedSlugs = chapter
-  .sort((a, b) => a.order - b.order) // Sort by order
+  .toSorted((a, b) => a.order - b.order)
   .map((item) => item.slug);
 
 export default chapter;

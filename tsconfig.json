@@ -10,7 +10,7 @@
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "bundler", // used to be `bundler`
+    "moduleResolution": "bundler",
     "allowJs": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,

@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 
 interface KaggaProps {
   id: string;
@@ -8516,10 +8515,10 @@ const kaggaData: Omit<KaggaProps, "id">[] = [
 
 const kagga: KaggaProps[] = kaggaData.map((item) => ({
   ...item,
-  id: uuidv4(),
+  id: String(item.number),
 }));
 
 // Generate sorted slugs
-export const sortedSlugs = kagga.sort((a, b) => a.number - b.number);
+export const sortedSlugs = kagga.toSorted((a, b) => a.number - b.number);
 
 export default kagga;
