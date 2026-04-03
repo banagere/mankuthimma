@@ -6,6 +6,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import logo from "../../public/apple-touch-icon.png";
 import site from "@/components/site";
+import Search from "@/components/search";
 
 interface RootLayoutProps {
   children: React.ReactNode;
@@ -15,8 +16,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <body className="flex flex-col scroll-smooth selection:bg-black selection:text-white">
-        <header className="">
-          <div className="flex p-5 mx-auto max-w-7xl">
+        <header>
+          <div className="flex items-center justify-between p-5 mx-auto max-w-7xl">
             <Link href="/" className="transition-opacity hover:opacity-80">
               <Image
                 src={logo}
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 priority
               />
             </Link>
+            <Search />
           </div>
         </header>
 

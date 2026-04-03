@@ -44,7 +44,7 @@ export default function ChapterContent({ slug }: { slug: string }) {
           </Suspense>
         </div>
         {kaggaItem.verses.map((verse) => (
-          <div key={verse.number} className="mt-6">
+          <div key={verse.number} id={`verse-${verse.number}`} className="mt-6 scroll-mt-4">
             <h2 className="text-2xl font-bold">{verse.number}</h2>
             <p className="py-2 leading-7">
               {verse.kannada.split("\n").map((line, index) => (
