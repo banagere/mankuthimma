@@ -1141,4 +1141,9 @@ export const sortedSlugs = chapterData
   .toSorted((a, b) => a.order - b.order)
   .map((item) => item.slug);
 
+// Reverse lookup: verse number -> chapter slug
+export const verseToChapter = new Map<number, string>(
+  chapterData.flatMap((ch) => ch.verses.map((v) => [v, ch.slug] as const)),
+);
+
 export default chapterData;

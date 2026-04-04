@@ -74,7 +74,7 @@ export default function Search() {
           loadIndex();
           setOpen(true);
         }}
-        className="flex items-center gap-2 px-3 py-1.5 text-sm text-neutral-500 transition-colors hover:text-neutral-900 border border-neutral-200 rounded-lg"
+        className="group flex items-center gap-2 px-3 py-1.5 text-sm text-neutral-500 transition-colors hover:text-black hover:border-black cursor-pointer border border-neutral-200 rounded-lg"
       >
         <svg
           width="15"
@@ -91,7 +91,7 @@ export default function Search() {
           />
         </svg>
         Search
-        <kbd className="hidden sm:inline text-xs text-neutral-400 border border-neutral-200 rounded px-1">
+        <kbd className="hidden sm:inline text-xs text-neutral-400 group-hover:text-black border border-neutral-200 group-hover:border-black rounded px-1 transition-colors">
           {isMac ? "⌘" : "Ctrl+"}K
         </kbd>
       </button>

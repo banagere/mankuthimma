@@ -2,13 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import ViewCounter from "@/components/view-counter";
+import SideNav from "@/components/side-nav";
+import HeartButton from "@/components/heart-button";
 import kagga from "@/api/verses";
 import chapter, { sortedSlugs } from "@/api/chapters";
-
-interface NavigationLinksProps {
-  prevSlug: string | null;
-  nextSlug: string | null;
-}
 
 export default function ChapterContent({ slug }: { slug: string }) {
   const chapterItem = chapter.find((chap) => chap.slug === slug);
@@ -29,8 +26,11 @@ export default function ChapterContent({ slug }: { slug: string }) {
       : null;
 
   return (
-    <div className="px-5 pb-32 mx-auto max-w-7xl min-h-screen">
-      <NavigationLinks prevSlug={prevSlug} nextSlug={nextSlug} />
+    <div className="relative px-5 pb-32 mx-auto max-w-7xl min-h-screen">
+      {/* Side navigation zones — desktop only, below header */}
+      <SideNav direction="left" slug={prevSlug} />
+      <SideNav direction="right" slug={nextSlug} />
+
       <article className="max-w-xl mx-auto text-center">
         <h1 className="text-2xl font-bold">{kaggaItem.title}</h1>
         <div className="pb-5 font-semibold tracking-wider text-red-700 justify-center flex gap-1">
@@ -58,32 +58,10 @@ export default function ChapterContent({ slug }: { slug: string }) {
             {verse.english && (
               <p className="py-2 leading-7 text-neutral-600">{verse.english}</p>
             )}
+            <HeartButton verseNumber={verse.number} />
           </div>
         ))}
       </article>
-    </div>
-  );
-}
-
-function NavigationLinks({ prevSlug, nextSlug }: NavigationLinksProps) {
-  return (
-    <div className="flex justify-between mb-2">
-      {prevSlug && (
-        <Link
-          href={`/kagga/${prevSlug}`}
-          className="transition-opacity hover:opacity-70"
-        >
-          &larr; Previous
-        </Link>
-      )}
-      {nextSlug && (
-        <Link
-          href={`/kagga/${nextSlug}`}
-          className="transition-opacity hover:opacity-70"
-        >
-          Next &rarr;
-        </Link>
-      )}
     </div>
   );
 }
