@@ -33,7 +33,7 @@ export default async function Home() {
                       <li key={ch.slug} className="flex items-baseline justify-between gap-2">
                         <Link
                           href={`/kagga/${ch.slug}`}
-                          className="font-medium truncate hover:text-red-700"
+                          className="font-medium truncate transition-colors duration-500 hover:text-red-700"
                         >
                           <span className="text-neutral-400 mr-2">{i + 1}.</span>
                           {ch.title}
@@ -56,7 +56,7 @@ export default async function Home() {
                       <li key={v.number}>
                         <Link
                           href={`/kagga/${v.chapterSlug}#verse-${v.number}`}
-                          className="flex items-baseline justify-between gap-2 hover:text-red-700"
+                          className="flex items-baseline justify-between gap-2 transition-colors duration-500 hover:text-red-700"
                         >
                           <span className="font-medium truncate">
                             <span className="text-neutral-400 mr-2">{i + 1}.</span>
@@ -83,7 +83,7 @@ export default async function Home() {
               <li className="flex items-baseline justify-between" key={chap.slug}>
                 <Link
                   href={`/kagga/${chap.slug}`}
-                  className="text-lg font-medium truncate hover:text-red-700"
+                  className="text-lg font-medium truncate transition-colors duration-500 hover:text-red-700"
                 >
                   {chap.title}
                 </Link>
@@ -115,7 +115,7 @@ export default async function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Github (opens in a new tab)"
-                className="underline transition-opacity hover:opacity-70 underline-offset-4"
+                className="underline transition-opacity duration-500 hover:opacity-70 underline-offset-4"
               >
                 Github
               </Link>

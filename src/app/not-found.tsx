@@ -8,7 +8,7 @@ export default function NotFound() {
       </h2>
       <p className="flex justify-center gap-2">
         Click here to go back
-        <Link href={"/"} className="text-red-700 duration-500 hover:opacity-80">
+        <Link href={"/"} className="text-red-700 transition-opacity duration-500 hover:opacity-80">
           home &rarr;
         </Link>
       </p>

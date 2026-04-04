@@ -40,7 +40,7 @@ export default function SideNav({
       <span
         style={{
           opacity: hovered ? 1 : 0,
-          transition: "opacity 0.2s",
+          transition: "opacity 0.5s",
           backgroundColor: "#171717",
           color: "#fff",
           borderRadius: "9999px",

@@ -18,7 +18,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body className="flex flex-col scroll-smooth selection:bg-black selection:text-white">
         <header>
           <div className="flex items-center justify-between p-5 mx-auto max-w-7xl">
-            <Link href="/" className="transition-opacity hover:opacity-80">
+            <Link href="/" className="transition-opacity duration-500 hover:opacity-80">
               <Image
                 src={logo}
                 alt={"Kagga Logo"}

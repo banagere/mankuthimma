@@ -59,14 +59,14 @@ export default function HeartButton({ verseNumber }: { verseNumber: number }) {
       pressed={liked}
       onPressedChange={handleToggle}
       aria-label={liked ? "Unlike verse" : "Like verse"}
-      className="inline-flex items-center gap-1.5 mt-3 cursor-pointer transition-colors"
+      className="inline-flex items-center gap-1.5 mt-3 cursor-pointer transition-colors duration-500"
     >
       <Heart
         size={18}
         className={
           liked
             ? "fill-red-700 text-red-700"
-            : "text-neutral-400 hover:text-red-700"
+            : "text-neutral-400 hover:text-red-700 transition-colors duration-500"
         }
       />
       {count !== null && count > 0 && (
