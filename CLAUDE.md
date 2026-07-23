@@ -11,9 +11,22 @@ mankuthimma.in is a Next.js website that presents Mankuthimmana Kagga — a coll
 - `bun dev` — start dev server (uses Turbopack)
 - `bun run build` — production build
 - `bun run lint` — ESLint (next/core-web-vitals config)
+- `bun run typecheck` — `tsc --noEmit`
 - `bun start` — start production server
 
-Package manager is **Bun** (lockfile: `bun.lockb`).
+Gate and supply chain:
+
+- `bun run ci` — full local gate: frozen install, lint, typecheck, audit, secret scan, build. Same checks CI runs.
+- `bun run audit` — fails only on high/critical advisories absent from `.audit-baseline.json`
+- `bun run audit:baseline` — accept the current advisories as reviewed, with a written justification per entry
+- `bun run hooks:install` — point `core.hooksPath` at `.githooks`
+
+Package manager is **Bun** (lockfile: `bun.lock` — text, so dependency diffs are reviewable).
+
+**Git hooks are opt-in per clone.** Without `bun run hooks:install`, the
+pre-commit secret scan and the pre-push gate do not run. GitHub enforces the
+same checks either way, but a secret is far cheaper to catch before it is
+committed than after it reaches a public repo.
 
 ## Architecture
 
