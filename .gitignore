@@ -1,7 +1,10 @@
 # files
 .DS_Store
+.env
 .env*.local
 .vercel
+.claude/settings.local.json
+tsconfig.tsbuildinfo
 
 # folders
 /node_modules
