@@ -1,0 +1,38 @@
+version: 2
+
+updates:
+  # Keeps the pinned action SHAs current. Without this, pinning to a SHA means
+  # never receiving upstream security fixes — Dependabot rewrites the SHA and
+  # updates the trailing version comment.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "ci"
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps"
+    # Wait before proposing a newly published version. Compromised releases are
+    # typically caught and yanked within days, so a cooldown is what stops a
+    # dependency-update PR from being the thing that pulls in the malicious
+    # version. Security advisories bypass this.
+    cooldown:
+      default-days: 7
+    groups:
+      # Grouped so routine bumps are one reviewable PR rather than five.
+      dev-dependencies:
+        dependency-type: development
+        patterns: ["*"]
+      react:
+        patterns: ["react", "react-dom", "@types/react"]
+      next:
+        patterns: ["next", "eslint-config-next"]

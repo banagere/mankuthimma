@@ -18,11 +18,13 @@ export default function ChapterContent({ slug }: { slug: string }) {
     verses: kagga.filter((k) => verseNumbers.has(k.number)),
   };
 
+  // Both accesses are bounds-guarded; `?? null` only satisfies
+  // noUncheckedIndexedAccess, it never actually fires.
   const currentIndex = sortedSlugs.indexOf(slug);
-  const prevSlug = currentIndex > 0 ? sortedSlugs[currentIndex - 1] : null;
+  const prevSlug = currentIndex > 0 ? (sortedSlugs[currentIndex - 1] ?? null) : null;
   const nextSlug =
     currentIndex < sortedSlugs.length - 1
-      ? sortedSlugs[currentIndex + 1]
+      ? (sortedSlugs[currentIndex + 1] ?? null)
       : null;
 
   return (

@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#
+# Fast pre-commit gate: catches a secret before it is ever written to an object,
+# then lints and typechecks. Full build is deferred to pre-push.
+#
+# Bypass with `git commit --no-verify` (note: GitHub push protection still
+# applies server-side, which is the point of having both).
+
+set -euo pipefail
+
+cd "$(git rev-parse --show-toplevel)"
+
+# --- Secrets, staged content only -------------------------------------------
+# Scans exactly what is about to be committed. Runs first and hard-fails:
+# everything else here is recoverable, a leaked credential in a public repo's
+# history is not.
+#
+# `gitleaks git --staged`, not the older `gitleaks protect --staged` — protect
+# is a hidden deprecated alias in 8.x and is no longer listed in --help.
+if command -v gitleaks >/dev/null 2>&1; then
+  printf '\033[1m▶ secret scan (staged)\033[0m\n'
+  if ! gitleaks git --staged --no-banner --redact; then
+    printf '\033[31m✗ potential secret in staged changes — commit blocked\033[0m\n'
+    exit 1
+  fi
+else
+  printf '\033[33m⚠ gitleaks not installed — staged secret scan skipped\033[0m\n'
+  printf '  install: brew install gitleaks\n'
+fi
+
+# --- Static checks ----------------------------------------------------------
+printf '\033[1m▶ lint\033[0m\n'
+bun run lint || { printf '\033[31m✗ lint failed\033[0m\n'; exit 1; }
+
+printf '\033[1m▶ typecheck\033[0m\n'
+bun run typecheck || { printf '\033[31m✗ typecheck failed\033[0m\n'; exit 1; }
+
+printf '\033[32m✓ pre-commit passed\033[0m\n'

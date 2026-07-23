@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+#
+# Full gate before anything leaves the machine. Runs the same script CI runs,
+# so a push that passes here passes on GitHub.
+#
+# Bypass with `git push --no-verify`.
+
+set -euo pipefail
+
+cd "$(git rev-parse --show-toplevel)"
+
+exec ./scripts/ci-local.sh

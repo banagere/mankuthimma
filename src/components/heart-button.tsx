@@ -9,19 +9,33 @@ export default function HeartButton({ verseNumber }: { verseNumber: number }) {
   const [count, setCount] = useState<number | null>(null);
 
   useEffect(() => {
-    // Check localStorage for previous like
+    // Guards against a response for a previous verseNumber landing after the
+    // prop changed and overwriting the current verse's state.
+    let cancelled = false;
+
+    // Read synchronously, apply with the fetch result. localStorage is only
+    // available post-hydration, and committing both together avoids a
+    // synchronous setState in the effect body (cascading render).
     const likedVerses: number[] = JSON.parse(
       localStorage.getItem("liked-verses") ?? "[]",
     );
-    if (likedVerses.includes(verseNumber)) {
-      setLiked(true);
-    }
+    const alreadyLiked = likedVerses.includes(verseNumber);
 
-    // Fetch current count
     fetch(`/api/likes/${verseNumber}`)
       .then((res) => res.json())
-      .then((data) => setCount(data.likes))
-      .catch(() => {});
+      .then((data) => {
+        if (cancelled) return;
+        if (alreadyLiked) setLiked(true);
+        setCount(data.likes);
+      })
+      .catch(() => {
+        // The count is unavailable, but a stored like is still worth showing.
+        if (!cancelled && alreadyLiked) setLiked(true);
+      });
+
+    return () => {
+      cancelled = true;
+    };
   }, [verseNumber]);
 
   async function handleToggle(pressed: boolean) {
