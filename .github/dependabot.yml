@@ -14,7 +14,12 @@ updates:
       actions:
         patterns: ["*"]
 
-  - package-ecosystem: npm
+  # `bun`, not `npm`. The lockfile here is bun.lock; the npm ecosystem does not
+  # understand it, so npm-ecosystem PRs bump package.json and leave the lockfile
+  # untouched. CI catches that combination on `--frozen-lockfile`, but only
+  # after the fact — and it means the version installed was never the version
+  # reviewed in the PR diff.
+  - package-ecosystem: bun
     directory: "/"
     schedule:
       interval: weekly

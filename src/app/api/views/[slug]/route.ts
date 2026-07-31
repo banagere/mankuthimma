@@ -2,8 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { kv } from "@vercel/kv";
 import chapterData from "@/api/chapters";
 import { viewsKey } from "@/lib/kv-keys";
+import {
+  clientAddress,
+  isAllowedOrigin,
+  withinRateLimit,
+} from "@/lib/request-guard";
 
 const RATE_LIMIT_MAX = 200;
+const UNIDENTIFIED_RATE_LIMIT_MAX = 20;
 const RATE_LIMIT_TTL = 3600; // 1 hour in seconds
 
 // Whitelist of writable keys — bounds the keyspace to the 189 real chapters.
@@ -19,20 +25,20 @@ export async function POST(
     return NextResponse.json({ error: "Unknown chapter" }, { status: 404 });
   }
 
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+  if (!isAllowedOrigin(request)) {
+    return NextResponse.json({ error: "Forbidden origin" }, { status: 403 });
+  }
+
+  const { id, identified } = clientAddress(request);
 
   try {
-    // Check rate limit
-    const rateLimitKey = `views:ratelimit:${ip}`;
-    const currentCount = await kv.incr(rateLimitKey);
+    const allowed = await withinRateLimit(
+      `views:ratelimit:${id}`,
+      identified ? RATE_LIMIT_MAX : UNIDENTIFIED_RATE_LIMIT_MAX,
+      RATE_LIMIT_TTL,
+    );
 
-    // Set TTL on first increment
-    if (currentCount === 1) {
-      await kv.expire(rateLimitKey, RATE_LIMIT_TTL);
-    }
-
-    if (currentCount > RATE_LIMIT_MAX) {
+    if (!allowed) {
       return NextResponse.json(
         { error: "Rate limit exceeded" },
         { status: 429 },

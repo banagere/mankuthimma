@@ -21,16 +21,24 @@ Gate and supply chain:
 - `bun run audit:baseline` — accept the current advisories as reviewed, with a written justification per entry
 - `bun run hooks:install` — point `core.hooksPath` at `.githooks`
 
-Package manager is **Bun** (lockfile: `bun.lock` — text, so dependency diffs are reviewable).
+Package manager is **Bun** (lockfile: `bun.lock` — text, so dependency diffs are reviewable). The version lives in `.bun-version` and is read from there by CI — do not hardcode it in a workflow.
 
 **Git hooks are opt-in per clone.** Without `bun run hooks:install`, the
 pre-commit secret scan and the pre-push gate do not run. GitHub enforces the
 same checks either way, but a secret is far cheaper to catch before it is
 committed than after it reaches a public repo.
 
+CI on GitHub runs four workflows:
+
+- `ci.yml` — `verify` (lint, typecheck, build), `audit` (advisory drift), `secrets` (gitleaks over full history), `signatures` (every commit signed)
+- `codeql.yml` — static analysis, `security-and-quality` query pack
+- `scorecard.yml` — OpenSSF supply-chain posture, weekly and on `branch_protection_rule`
+
+`main` is protected: signed commits, linear history, code-owner review, conversation resolution, and the required checks above. Admins are **not** exempt — every change to `main` goes through a pull request, including yours.
+
 ## Architecture
 
-**Hybrid routing**: The app uses Next.js App Router (`src/app/`) for pages and the legacy Pages Router (`src/pages/`) for the API route.
+**Routing**: App Router throughout (`src/app/`), pages and API route handlers alike. There is no `src/pages/` any more.
 
 **Data layer**: Verse and chapter data live as static TypeScript arrays, not in a database:
 - `src/api/verses.ts` — all 945 verses (~6MB). Each verse has `number`, `kannada` (the poem text), and `kannada_explanation`. Fields prefixed with `delete` are legacy/unused.
@@ -43,7 +51,9 @@ committed than after it reaches a public repo.
 - `/kagga/[slug]` (`src/app/kagga/[slug]/page.tsx`) — renders a chapter's verses. This is a **client component** (`"use client"`). Navigation between chapters uses `sortedSlugs`.
 - `src/app/kagga/[slug]/metadata.ts` — `generateMetadata` for chapter pages (exists but not wired into the page component)
 
-**View counter**: `src/pages/api/views/[slug].ts` uses Vercel KV (Redis) to track and increment page views. The client component `src/components/view-counter.tsx` fetches from this API.
+**Counters**: Two route handlers write to Vercel KV (Redis) — `src/app/api/views/[slug]/route.ts` (chapter views, read by `src/components/view-counter.tsx`) and `src/app/api/likes/[number]/route.ts` (verse likes, read by `src/components/heart-button.tsx`).
+
+Both are unauthenticated, so the guards in `src/lib/request-guard.ts` are what bounds them, and every write path must keep using all three: the slug/number is validated against the known chapters and verses before any KV call, `isAllowedOrigin` rejects requests that did not come from this site, and `withinRateLimit` applies a per-address budget — a much smaller one when the address could not be determined. Likes additionally dedupe per address per verse via `SET NX`, because the leaderboard ranks on that score.
 
 **Site config**: `src/components/site.tsx` exports site name, URL, and description constants used by `sitemap.ts`, `robots.ts`, and `manifest.ts`.
 

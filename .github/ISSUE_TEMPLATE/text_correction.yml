@@ -1,0 +1,43 @@
+name: Text correction
+description: A verse or its explanation does not match the source.
+labels: [text]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The 945 verses are the point of this site. A correction is welcome, but
+        it has to be checkable against a printed edition — please cite one.
+
+  - type: input
+    id: verse
+    attributes:
+      label: Verse number
+      description: The number as shown on the site, 1 to 945.
+      placeholder: "247"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: What the site shows
+      description: Paste the exact text currently on the page.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: correct
+    attributes:
+      label: What it should say
+      render: text
+    validations:
+      required: true
+
+  - type: input
+    id: source
+    attributes:
+      label: Source
+      description: Edition, publisher, and page or verse reference.
+    validations:
+      required: true
