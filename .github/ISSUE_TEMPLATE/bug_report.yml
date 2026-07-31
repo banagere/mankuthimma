@@ -1,0 +1,49 @@
+name: Site bug
+description: Something on the site is broken or behaves wrongly.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For a mistake in the Kannada text of a verse or its explanation, use
+        **Text correction** instead — it asks for the things needed to verify a
+        change against the source.
+
+        For a security vulnerability, do not file here. Use
+        [private advisory reporting](https://github.com/banagere/mankuthimma/security/advisories/new).
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+
+  - type: input
+    id: where
+    attributes:
+      label: Where
+      description: The URL, or the chapter and verse number.
+      placeholder: https://mankuthimma.in/kagga/invocation
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open ...
+        2. Click ...
+        3. ...
+    validations:
+      required: false
+
+  - type: input
+    id: environment
+    attributes:
+      label: Browser and device
+      placeholder: Safari 18, iPhone 15
+    validations:
+      required: false

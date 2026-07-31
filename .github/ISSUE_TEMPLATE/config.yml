@@ -1,0 +1,13 @@
+# Blank issues stay off. Every route below lands somewhere that can actually
+# act on the report, and the security route deliberately leaves the issue
+# tracker entirely — a vulnerability filed as a public issue is a disclosure.
+blank_issues_enabled: false
+
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/banagere/mankuthimma/security/advisories/new
+    about: Private disclosure. Never open a public issue for a vulnerability.
+
+  - name: Ask a question or suggest something
+    url: https://github.com/banagere/mankuthimma/discussions
+    about: For anything that is not a defect in the site or its text.

@@ -1,0 +1,20 @@
+# Every path needs review from the owner before it can merge into main.
+#
+# On a single-maintainer repo this cannot stop a bad change on its own — you
+# are the reviewer. What it does buy is that a pull request from anyone else,
+# including a compromised Dependabot run or an outside contributor, cannot
+# merge without an explicit approval that names you. Branch protection has
+# `require_code_owner_reviews` on, so this file is enforced, not advisory.
+
+* @banagere
+
+# Anything that can execute during CI or change what CI enforces. Called out
+# separately from the catch-all so a diff touching the build gate is visibly a
+# different class of change in the PR's review summary than a poem edit.
+/.github/            @banagere
+/.githooks/          @banagere
+/scripts/            @banagere
+/package.json        @banagere
+/bun.lock            @banagere
+/next.config.ts      @banagere
+/.audit-baseline.json @banagere

@@ -1,6 +1,6 @@
 {
   "$comment": "Reviewed high/critical advisories with no resolvable version in range. `bun run audit` fails only on advisories absent from this list. Regenerate with `bun run audit:baseline` and justify each new entry.",
-  "reviewed": "2026-07-23",
+  "reviewed": "2026-07-31",
   "entries": [
     {
       "key": "brace-expansion@GHSA-3jxr-9vmj-r5cp",
@@ -9,6 +9,14 @@
       "title": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
       "url": "https://github.com/advisories/GHSA-3jxr-9vmj-r5cp",
       "note": "Dev-only: reached via eslint > @eslint/eslintrc > minimatch and eslint-config-next > typescript-eslint. Not in the production bundle. The DoS needs an attacker-supplied glob; the only patterns are our own eslint config. Pinned by eslint's range — unfixable until eslint bumps."
+    },
+    {
+      "key": "brace-expansion@GHSA-mh99-v99m-4gvg",
+      "package": "brace-expansion",
+      "severity": "high",
+      "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
+      "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
+      "note": "Dev-only: same eslint > minimatch path as GHSA-3jxr-9vmj-r5cp, at 1.1.11 and 2.0.1. Not in the production bundle. First patched version is 5.0.8, so neither the 1.x nor the 2.x line has a fix in range — unresolvable here until eslint moves. The OOM needs an attacker-supplied glob; the only patterns are our own eslint config."
     },
     {
       "key": "flatted@GHSA-25h7-pfq9-p65f",
@@ -57,6 +65,22 @@
       "title": "Picomatch has a ReDoS vulnerability via extglob quantifiers",
       "url": "https://github.com/advisories/GHSA-c2c7-rcm5-vvqj",
       "note": "Dev-only: eslint-config-next > typescript-eslint > tinyglobby > fdir > picomatch. Lint-time file discovery only. Not in the production bundle."
+    },
+    {
+      "key": "postcss@GHSA-6g55-p6wh-862q",
+      "package": "postcss",
+      "severity": "high",
+      "title": "PostCSS: Arbitrary file read and information disclosure via attacker-controlled sourceMappingURL in CSS comments",
+      "url": "https://github.com/advisories/GHSA-6g55-p6wh-862q",
+      "note": "Our direct postcss is 8.5.22, already past the 8.5.12 fix. What the audit sees is next@16.2.11's own nested postcss@8.4.31, which next pins and we cannot override without an unsupported resolution. Build-time only, not in the production bundle. Exploitation needs a sourceMappingURL comment in CSS we compile — the only CSS compiled here is src/app/global.css and Tailwind's output, both ours. Drops off when next bumps its pin."
+    },
+    {
+      "key": "postcss@GHSA-r28c-9q8g-f849",
+      "package": "postcss",
+      "severity": "high",
+      "title": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
+      "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849",
+      "note": "Same nested next@16.2.11 > postcss@8.4.31 as GHSA-6g55-p6wh-862q, same reasoning: build-time only, no attacker-controlled CSS reaches it, and the pin belongs to next rather than to us."
     },
     {
       "key": "sharp@GHSA-f88m-g3jw-g9cj",
