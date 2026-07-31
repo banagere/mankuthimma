@@ -1,0 +1,86 @@
+---
+import type { GetStaticPaths } from "astro";
+import Layout from "@/layouts/Layout.astro";
+import SideNav from "@/components/SideNav.astro";
+import ViewCounter from "@/components/ViewCounter";
+import HeartButton from "@/components/HeartButton";
+import chapters, { sortedSlugs } from "@/api/chapters";
+import kagga from "@/api/verses";
+import site from "@/lib/site";
+
+// All 189 chapters are built ahead of time. The verse corpus is a static
+// array, so there is nothing to render on demand — only the two counters are
+// live, and those are client islands hitting the API routes.
+export const getStaticPaths = (() =>
+  chapters.map((chap) => {
+    const numbers = new Set(chap.verses);
+    return {
+      params: { slug: chap.slug },
+      props: {
+        title: chap.title,
+        verses: kagga.filter((k) => numbers.has(k.number)),
+      },
+    };
+  })) satisfies GetStaticPaths;
+
+const { slug } = Astro.params as { slug: string };
+const { title, verses } = Astro.props;
+
+// Both accesses are bounds-guarded; `?? null` only satisfies
+// noUncheckedIndexedAccess, it never actually fires.
+const currentIndex = sortedSlugs.indexOf(slug);
+const prevSlug = currentIndex > 0 ? (sortedSlugs[currentIndex - 1] ?? null) : null;
+const nextSlug =
+  currentIndex < sortedSlugs.length - 1
+    ? (sortedSlugs[currentIndex + 1] ?? null)
+    : null;
+
+const description = `Explore the verses of "${title}" from Mankuthimmana Kagga.`;
+---
+
+<Layout
+  title={title}
+  description={description}
+  url={`${site.website}/kagga/${slug}`}
+  ogType="article"
+>
+  <div class="relative px-5 pb-32 mx-auto max-w-7xl min-h-screen">
+    {/* Side navigation zones — desktop only, below header */}
+    <SideNav direction="left" slug={prevSlug} />
+    <SideNav direction="right" slug={nextSlug} />
+
+    <article class="max-w-xl mx-auto text-center">
+      <h1 class="text-2xl font-bold">{title}</h1>
+      <div
+        class="pb-5 font-semibold tracking-wider text-red-700 justify-center flex gap-1"
+      >
+        <div class="flex gap-0.5">
+          <p>{verses[0]?.number}</p>
+          <p>—</p>
+          <p>{verses[verses.length - 1]?.number}</p>
+        </div>
+        <ViewCounter slug={slug} client:load />
+      </div>
+      {
+        verses.map((verse) => (
+          <div id={`verse-${verse.number}`} class="mt-6 scroll-mt-4">
+            <h2 class="text-2xl font-bold">{verse.number}</h2>
+            <p class="py-2 leading-7">
+              {verse.kannada.split("\n").map((line) => (
+                <Fragment>
+                  {line}
+                  <br />
+                </Fragment>
+              ))}
+            </p>
+            <p class="py-2 leading-7">{verse.kannada_explanation}</p>
+            {verse.english && (
+              <p class="py-2 leading-7 text-neutral-600">{verse.english}</p>
+            )}
+            <HeartButton verseNumber={verse.number} client:visible />
+          </div>
+        ))
+      }
+    </article>
+  </div>
+</Layout>

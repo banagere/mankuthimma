@@ -1,12 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
+import type { APIRoute } from "astro";
 import { kv } from "@vercel/kv";
 import { verseToChapter } from "@/api/chapters";
 import { LEADERBOARD_KEY } from "@/lib/kv-keys";
 import {
   clientAddress,
   isAllowedOrigin,
+  json,
   withinRateLimit,
 } from "@/lib/request-guard";
+
+export const prerender = false;
 
 const RATE_LIMIT_MAX = 50;
 const UNIDENTIFIED_RATE_LIMIT_MAX = 5;
@@ -24,44 +27,36 @@ const DEDUPE_TTL = 60 * 60 * 24 * 90; // 90 days
  * part: every caller writes `String(verse)`, so "0012" and "12" can never
  * become two separate members of the leaderboard.
  */
-function parseVerseNumber(raw: string): number | null {
-  if (!/^\d{1,4}$/.test(raw)) return null;
+function parseVerseNumber(raw: string | undefined): number | null {
+  if (!raw || !/^\d{1,4}$/.test(raw)) return null;
   const verse = Number(raw);
   return verseToChapter.has(verse) ? verse : null;
 }
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ number: string }> },
-) {
-  const { number } = await params;
-  const verse = parseVerseNumber(number);
+export const GET: APIRoute = async ({ params }) => {
+  const verse = parseVerseNumber(params.number);
 
   if (verse === null) {
-    return NextResponse.json({ error: "Unknown verse" }, { status: 404 });
+    return json({ error: "Unknown verse" }, 404);
   }
 
   try {
     const likes = (await kv.zscore(LEADERBOARD_KEY, String(verse))) ?? 0;
-    return NextResponse.json({ likes });
+    return json({ likes });
   } catch {
-    return NextResponse.json({ likes: 0 });
+    return json({ likes: 0 });
   }
-}
+};
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ number: string }> },
-) {
-  const { number } = await params;
-  const verse = parseVerseNumber(number);
+export const POST: APIRoute = async ({ params, request }) => {
+  const verse = parseVerseNumber(params.number);
 
   if (verse === null) {
-    return NextResponse.json({ error: "Unknown verse" }, { status: 404 });
+    return json({ error: "Unknown verse" }, 404);
   }
 
   if (!isAllowedOrigin(request)) {
-    return NextResponse.json({ error: "Forbidden origin" }, { status: 403 });
+    return json({ error: "Forbidden origin" }, 403);
   }
 
   const { id, identified } = clientAddress(request);
@@ -74,10 +69,7 @@ export async function POST(
     );
 
     if (!allowed) {
-      return NextResponse.json(
-        { error: "Rate limit exceeded" },
-        { status: 429 },
-      );
+      return json({ error: "Rate limit exceeded" }, 429);
     }
 
     // One like per address per verse. The rate limit alone still allowed 50
@@ -97,15 +89,12 @@ export async function POST(
       // the client applied an optimistic increment, and this corrects it
       // without making a duplicate look like a failure.
       const likes = (await kv.zscore(LEADERBOARD_KEY, String(verse))) ?? 0;
-      return NextResponse.json({ likes, alreadyLiked: true });
+      return json({ likes, alreadyLiked: true });
     }
 
     const likes = await kv.zincrby(LEADERBOARD_KEY, 1, String(verse));
-    return NextResponse.json({ likes });
+    return json({ likes });
   } catch {
-    return NextResponse.json(
-      { error: "Failed to update like count" },
-      { status: 500 },
-    );
+    return json({ error: "Failed to update like count" }, 500);
   }
-}
+};

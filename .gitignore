@@ -4,10 +4,10 @@
 .env*.local
 .vercel
 .claude/settings.local.json
-tsconfig.tsbuildinfo
 
 # folders
 /node_modules
-/.next
+/dist
+/.astro
 /build
 /out/

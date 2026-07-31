@@ -1,0 +1,86 @@
+---
+import Analytics from "@vercel/analytics/astro";
+import SpeedInsights from "@vercel/speed-insights/astro";
+import Search from "@/components/Search";
+import site from "@/lib/site";
+import "@/styles/global.css";
+
+interface Props {
+  /** Page title. Rendered verbatim — there is no site-name template. */
+  title?: string;
+  description?: string;
+  /** Canonical URL for this page. Defaults to the site root. */
+  url?: string;
+  ogType?: "website" | "article";
+}
+
+const {
+  title = site.name,
+  description = site.description,
+  url = site.website,
+  ogType = "website",
+} = Astro.props;
+
+const ogImage = `${site.website}/opengraph-image.jpg`;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content="DV Gundappa, Kagga, Kannada" />
+    <link rel="canonical" href={url} />
+
+    <meta
+      name="robots"
+      content="index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"
+    />
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content="en-IN" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={site.name} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+  </head>
+
+  <body class="flex flex-col scroll-smooth selection:bg-black selection:text-white">
+    <header>
+      <div class="flex items-center justify-between p-5 mx-auto max-w-7xl">
+        <a href="/" class="transition-opacity duration-500 hover:opacity-80">
+          <img
+            src="/apple-touch-icon.png"
+            alt="Kagga Logo"
+            width="50"
+            height="50"
+            fetchpriority="high"
+          />
+        </a>
+        <!-- client:idle, not client:load: the search index is a large lazy
+             chunk and nothing on first paint depends on the button. -->
+        <Search client:idle />
+      </div>
+    </header>
+
+    <main><slot /></main>
+
+    <Analytics />
+    <SpeedInsights />
+  </body>
+</html>

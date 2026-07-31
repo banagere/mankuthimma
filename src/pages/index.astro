@@ -1,0 +1,164 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import chapters from "@/api/chapters";
+import { getTopChaptersByViews, getTopVersesByLikes } from "@/lib/kv-stats";
+
+// Rendered on demand: the two leaderboards come from KV, which a build-time
+// snapshot would freeze forever. `getTop*` memoises for 60s, so the common
+// case is still an in-process read rather than a round trip.
+export const prerender = false;
+
+let topChapters: Awaited<ReturnType<typeof getTopChaptersByViews>> = [];
+let topVerses: Awaited<ReturnType<typeof getTopVersesByLikes>> = [];
+
+try {
+  [topChapters, topVerses] = await Promise.all([
+    getTopChaptersByViews(5),
+    getTopVersesByLikes(5),
+  ]);
+} catch {
+  // KV unavailable — homepage still renders without stats.
+}
+
+const number = new Intl.NumberFormat("en-us");
+
+const about = [
+  "Mankuthimmana Kagga is written by Devanahalli Venkataramanaiah Gundappa (DVG) and was first published in 1943. It stands as a prominent piece of Kannada literature. This collection comprises 945 poems, each spanning four lines, with several written in old Kannada (ಹಳೆಗನ್ನಡ).",
+  "This book explores deeper questions of life, reflects on the essence of Ultimate Truth (reality), and suggests leading a balanced life amidst the complexities and constant changes of our world. It encourages adopting a moderate approach, with one hand reaching for the Ultimate Truth and the other engaged with the tangible world.",
+  "Mankuthimmana Kagga fascinated me the first time I read it at school. I wished to revisit it and share some snippets, but I couldn't find it online. This led me to create this website. This treasure shouldn't be hidden and must be accessible to all. I hope these Kagga's change your outlook towards life, as it did to mine!",
+  "The content for this site was sourced from books and websites, with full credit to the original authors and publishers. I earn no money from this and did it out of gratitude for DVG's craft.",
+  "If you love what you read, consider purchasing the book to support the people who helped bring DVG's work to life.",
+];
+---
+
+<Layout>
+  <div>
+    <div class="mx-auto max-w-7xl">
+      {
+        (topChapters.length > 0 || topVerses.length > 0) && (
+          <div class="px-5 pt-6 pb-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+              {topChapters.length > 0 && (
+                <section>
+                  <h2 class="text-lg font-bold mb-4">Most Read</h2>
+                  <ol class="space-y-2">
+                    {topChapters.map((ch, i) => (
+                      <li class="flex items-baseline justify-between gap-2">
+                        <a
+                          href={`/kagga/${ch.slug}`}
+                          class="font-medium truncate transition-colors duration-500 hover:text-red-700"
+                        >
+                          <span class="text-neutral-400 mr-2">{i + 1}.</span>
+                          {ch.title}
+                        </a>
+                        <span class="flex items-center gap-1 text-sm text-neutral-400 shrink-0">
+                          <svg
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                          {number.format(ch.views)}
+                        </span>
+                      </li>
+                    ))}
+                  </ol>
+                </section>
+              )}
+
+              {topVerses.length > 0 && (
+                <section>
+                  <h2 class="text-lg font-bold mb-4">Most Loved</h2>
+                  <ol class="space-y-2">
+                    {topVerses.map((v, i) => (
+                      <li>
+                        <a
+                          href={`/kagga/${v.chapterSlug}#verse-${v.number}`}
+                          class="flex items-baseline justify-between gap-2 transition-colors duration-500 hover:text-red-700"
+                        >
+                          <span class="font-medium truncate">
+                            <span class="text-neutral-400 mr-2">{i + 1}.</span>
+                            <span class="text-sm">#{v.number}</span>{" "}
+                            {v.kannadaSnippet}
+                          </span>
+                          <span class="flex items-center gap-1 text-sm text-red-700 shrink-0">
+                            <svg
+                              width="14"
+                              height="14"
+                              viewBox="0 0 24 24"
+                              fill="currentColor"
+                              stroke="currentColor"
+                              stroke-width="2"
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              aria-hidden="true"
+                            >
+                              <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                            </svg>
+                            {v.likes}
+                          </span>
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                </section>
+              )}
+            </div>
+          </div>
+        )
+      }
+
+      <div class="px-5 pb-10">
+        <ul class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-5">
+          {
+            chapters.map((chap) => (
+              <li class="flex items-baseline justify-between">
+                <a
+                  href={`/kagga/${chap.slug}`}
+                  class="text-lg font-medium truncate transition-colors duration-500 hover:text-red-700"
+                >
+                  {chap.title}
+                </a>
+
+                <div class="flex gap-0.5 font-medium text-red-700">
+                  <p>{chap.verses[0]}</p>
+                  <p>—</p>
+                  <p>{chap.verses[chap.verses.length - 1]}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="text-white bg-red-700">
+      <div
+        class="flex flex-col items-center min-h-screen justify-center max-w-5xl p-5 mx-auto text-center"
+      >
+        {about.map((text) => <p class="py-4 text-2xl font-medium">{text}</p>)}
+        <p class="py-4 text-2xl font-medium">
+          This website's code is publicly accessible. If you'd like to check it,
+          visit{" "}
+          <a
+            href="https://github.com/banagere/mankuthimma"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Github (opens in a new tab)"
+            class="underline transition-opacity duration-500 hover:opacity-70 underline-offset-4"
+          >
+            Github
+          </a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</Layout>

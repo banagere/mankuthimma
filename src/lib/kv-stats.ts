@@ -1,5 +1,4 @@
 import { kv } from "@vercel/kv";
-import { unstable_cache } from "next/cache";
 import chapterData, { verseToChapter } from "@/api/chapters";
 import kagga from "@/api/verses";
 import { LEADERBOARD_KEY, viewsKey } from "@/lib/kv-keys";
@@ -66,14 +65,37 @@ async function fetchTopVersesByLikes(limit: number): Promise<TopVerse[]> {
   return verses;
 }
 
-export const getTopChaptersByViews = unstable_cache(
-  fetchTopChaptersByViews,
-  ["top-chapters-by-views"],
-  { revalidate: 60 },
-);
+const TTL_MS = 60_000;
 
-export const getTopVersesByLikes = unstable_cache(
-  fetchTopVersesByLikes,
-  ["top-verses-by-likes"],
-  { revalidate: 60 },
-);
+/**
+ * Memoise a KV read for `TTL_MS`, keyed by the argument.
+ *
+ * Replaces Next's `unstable_cache`, which has no Astro equivalent. The scope
+ * is narrower — one serverless instance rather than a shared cache — but the
+ * job is the same and the job is modest: keep a burst of homepage requests
+ * from turning into a burst of Redis round trips. A stale entry costs a
+ * leaderboard that is up to a minute behind, which is what the original
+ * `revalidate: 60` already accepted.
+ *
+ * In-flight promises are cached, not just settled values, so concurrent
+ * requests during a cold read share one round trip. A rejection is evicted so
+ * a transient KV failure is not remembered for a minute.
+ */
+function memoize<T>(
+  fn: (arg: number) => Promise<T>,
+): (arg: number) => Promise<T> {
+  const cache = new Map<number, { at: number; value: Promise<T> }>();
+
+  return (arg: number) => {
+    const hit = cache.get(arg);
+    if (hit && Date.now() - hit.at < TTL_MS) return hit.value;
+
+    const value = fn(arg);
+    cache.set(arg, { at: Date.now(), value });
+    value.catch(() => cache.delete(arg));
+    return value;
+  };
+}
+
+export const getTopChaptersByViews = memoize(fetchTopChaptersByViews);
+export const getTopVersesByLikes = memoize(fetchTopVersesByLikes);

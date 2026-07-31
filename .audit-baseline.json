@@ -3,92 +3,20 @@
   "reviewed": "2026-07-31",
   "entries": [
     {
-      "key": "brace-expansion@GHSA-3jxr-9vmj-r5cp",
-      "package": "brace-expansion",
-      "severity": "high",
-      "title": "brace-expansion: DoS via exponential-time expansion of consecutive non-expanding {} groups",
-      "url": "https://github.com/advisories/GHSA-3jxr-9vmj-r5cp",
-      "note": "Dev-only: reached via eslint > @eslint/eslintrc > minimatch and eslint-config-next > typescript-eslint. Not in the production bundle. The DoS needs an attacker-supplied glob; the only patterns are our own eslint config. Pinned by eslint's range — unfixable until eslint bumps."
-    },
-    {
       "key": "brace-expansion@GHSA-mh99-v99m-4gvg",
       "package": "brace-expansion",
       "severity": "high",
       "title": "brace-expansion: DoS via unbounded expansion length causing an out-of-memory process crash",
       "url": "https://github.com/advisories/GHSA-mh99-v99m-4gvg",
-      "note": "Dev-only: same eslint > minimatch path as GHSA-3jxr-9vmj-r5cp, at 1.1.11 and 2.0.1. Not in the production bundle. First patched version is 5.0.8, so neither the 1.x nor the 2.x line has a fix in range — unresolvable here until eslint moves. The OOM needs an attacker-supplied glob; the only patterns are our own eslint config."
+      "note": "Dev-only: eslint@9.39.5 > @eslint/config-array > minimatch@3.1.5 > brace-expansion@1.1.18. Lint-time config matching, never part of the deployed site. First patched version is 5.0.8, so the pinned 1.x line has no fix in range — unresolvable here until eslint moves off minimatch 3. The OOM needs an attacker-supplied glob; the only patterns here are our own eslint config."
     },
     {
-      "key": "flatted@GHSA-25h7-pfq9-p65f",
-      "package": "flatted",
+      "key": "path-to-regexp@GHSA-9wv6-86v2-598j",
+      "package": "path-to-regexp",
       "severity": "high",
-      "title": "flatted vulnerable to unbounded recursion DoS in parse() revive phase",
-      "url": "https://github.com/advisories/GHSA-25h7-pfq9-p65f",
-      "note": "Dev-only: eslint's cache serialization. Parses only eslint's own cache file on this machine, never untrusted input. Not in the production bundle."
-    },
-    {
-      "key": "flatted@GHSA-rf6f-7fwh-wjgh",
-      "package": "flatted",
-      "severity": "high",
-      "title": "Prototype Pollution via parse() in NodeJS flatted",
-      "url": "https://github.com/advisories/GHSA-rf6f-7fwh-wjgh",
-      "note": "Dev-only: same eslint cache path as GHSA-25h7-pfq9-p65f. No untrusted input reaches parse(). Not in the production bundle."
-    },
-    {
-      "key": "minimatch@GHSA-23c5-xmqv-rm74",
-      "package": "minimatch",
-      "severity": "high",
-      "title": "minimatch ReDoS: nested *() extglobs generate catastrophically backtracking regular expressions",
-      "url": "https://github.com/advisories/GHSA-23c5-xmqv-rm74",
-      "note": "Dev-only: eslint file matching. Patterns come from our own eslint config, not from user input. Pinned by eslint's range."
-    },
-    {
-      "key": "minimatch@GHSA-3ppc-4f35-3m26",
-      "package": "minimatch",
-      "severity": "high",
-      "title": "minimatch has a ReDoS via repeated wildcards with non-matching literal in pattern",
-      "url": "https://github.com/advisories/GHSA-3ppc-4f35-3m26",
-      "note": "Dev-only: same eslint matching path as GHSA-23c5-xmqv-rm74. No attacker-controlled glob."
-    },
-    {
-      "key": "minimatch@GHSA-7r86-cg39-jmmj",
-      "package": "minimatch",
-      "severity": "high",
-      "title": "minimatch has ReDoS: matchOne() combinatorial backtracking via multiple non-adjacent GLOBSTAR segments",
-      "url": "https://github.com/advisories/GHSA-7r86-cg39-jmmj",
-      "note": "Dev-only: same eslint matching path as GHSA-23c5-xmqv-rm74. No attacker-controlled glob."
-    },
-    {
-      "key": "picomatch@GHSA-c2c7-rcm5-vvqj",
-      "package": "picomatch",
-      "severity": "high",
-      "title": "Picomatch has a ReDoS vulnerability via extglob quantifiers",
-      "url": "https://github.com/advisories/GHSA-c2c7-rcm5-vvqj",
-      "note": "Dev-only: eslint-config-next > typescript-eslint > tinyglobby > fdir > picomatch. Lint-time file discovery only. Not in the production bundle."
-    },
-    {
-      "key": "postcss@GHSA-6g55-p6wh-862q",
-      "package": "postcss",
-      "severity": "high",
-      "title": "PostCSS: Arbitrary file read and information disclosure via attacker-controlled sourceMappingURL in CSS comments",
-      "url": "https://github.com/advisories/GHSA-6g55-p6wh-862q",
-      "note": "Our direct postcss is 8.5.22, already past the 8.5.12 fix. What the audit sees is next@16.2.11's own nested postcss@8.4.31, which next pins and we cannot override without an unsupported resolution. Build-time only, not in the production bundle. Exploitation needs a sourceMappingURL comment in CSS we compile — the only CSS compiled here is src/app/global.css and Tailwind's output, both ours. Drops off when next bumps its pin."
-    },
-    {
-      "key": "postcss@GHSA-r28c-9q8g-f849",
-      "package": "postcss",
-      "severity": "high",
-      "title": "PostCSS: Path Traversal in Previous Source Map Auto-Loading (sourceMappingURL) leads to Arbitrary .map File Disclosure",
-      "url": "https://github.com/advisories/GHSA-r28c-9q8g-f849",
-      "note": "Same nested next@16.2.11 > postcss@8.4.31 as GHSA-6g55-p6wh-862q, same reasoning: build-time only, no attacker-controlled CSS reaches it, and the pin belongs to next rather than to us."
-    },
-    {
-      "key": "sharp@GHSA-f88m-g3jw-g9cj",
-      "package": "sharp",
-      "severity": "high",
-      "title": "sharp inherited vulnerabilities in libvips: CVE-2026-33327, CVE-2026-33328, CVE-2026-35590, CVE-2026-35591",
-      "url": "https://github.com/advisories/GHSA-f88m-g3jw-g9cj",
-      "note": "RUNTIME dependency (next > sharp) — the only entry here that is not dev-only. Exploitation requires optimizing a malicious image. next.config.ts declares no images.remotePatterns, so Next refuses to optimize remote URLs, and the site has no upload path: every image sharp sees is committed to /public by us. Next pins sharp at ^0.34.5, so 0.35.0 is out of range and unfixable here. RE-EVALUATE if remotePatterns is ever added or user uploads are introduced. Dependabot will surface the Next bump that resolves this."
+      "title": "path-to-regexp outputs backtracking regular expressions",
+      "url": "https://github.com/advisories/GHSA-9wv6-86v2-598j",
+      "note": "Build-only: @astrojs/vercel > @vercel/routing-utils, which pins path-to-regexp at exactly 6.1.0 (it also carries a patched 6.3.0 under an alias for newer behaviour, so no range bump resolves this). It runs once during `astro build` to compile the route table into .vercel/output/config.json; it is not in the deployed function. The ReDoS needs an attacker-controlled route pattern, and the patterns are our own file names under src/pages. Drops off when @vercel/routing-utils moves to the aliased copy."
     }
   ]
 }

@@ -1,23 +1,35 @@
-"use client";
-
 import { Command } from "cmdk";
 import * as Dialog from "@radix-ui/react-dialog";
 import Fuse from "fuse.js";
-import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import type { SearchEntry } from "@/api/search-index";
 
+// The platform never changes for the life of the page, so there is nothing to
+// subscribe to. Reading it through useSyncExternalStore rather than an effect
+// is what lets the server render ⌘ and the client correct it to Ctrl without
+// a hydration mismatch and without a cascading render.
+const subscribeToNothing = () => () => {};
+const readIsMac = () => navigator.userAgent.includes("Mac");
+const serverIsMac = () => true;
+
 export default function Search() {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [index, setIndex] = useState<SearchEntry[] | null>(null);
-  const [isMac, setIsMac] = useState(true);
   const loadingRef = useRef(false);
 
-  useEffect(() => {
-    setIsMac(navigator.userAgent.includes("Mac"));
-  }, []);
+  const isMac = useSyncExternalStore(
+    subscribeToNothing,
+    readIsMac,
+    serverIsMac,
+  );
 
   const loadIndex = useCallback(() => {
     if (index || loadingRef.current) return;
@@ -64,7 +76,9 @@ export default function Search() {
     setOpen(false);
     setQuery("");
     const hash = entry.verseNumber ? `#verse-${entry.verseNumber}` : "";
-    router.push(`/kagga/${entry.slug}${hash}`);
+    // A full navigation rather than a router push: the chapter pages are
+    // static HTML and there is no client-side router to push to.
+    window.location.assign(`/kagga/${entry.slug}${hash}`);
   };
 
   return (
@@ -108,8 +122,12 @@ export default function Search() {
         <Dialog.Description className="sr-only">
           Search for chapters and verses
         </Dialog.Description>
-        <div
-          className="fixed inset-0 bg-black/50"
+        {/* A real button, not a div with onClick: dismissing is an action, and
+            this way it is reachable without a mouse and announced as one. */}
+        <button
+          type="button"
+          aria-label="Close search"
+          className="fixed inset-0 w-full h-full bg-black/50 cursor-default"
           onClick={() => setOpen(false)}
         />
         <div className="fixed top-[20%] left-1/2 -translate-x-1/2 w-full max-w-lg bg-white rounded-xl shadow-2xl overflow-hidden">

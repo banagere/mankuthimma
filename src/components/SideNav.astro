@@ -1,0 +1,41 @@
+---
+interface Props {
+  direction: "left" | "right";
+  slug: string | null;
+}
+
+const { direction, slug } = Astro.props;
+const isLeft = direction === "left";
+---
+
+{
+  slug && (
+    <a
+      href={`/kagga/${slug}`}
+      aria-label={isLeft ? "Previous chapter" : "Next chapter"}
+      class="group fixed top-20 bottom-0 z-10 hidden lg:flex items-center justify-center cursor-pointer"
+      style={{
+        [isLeft ? "left" : "right"]: 0,
+        // The article column is max-w-xl (36rem) centred; this claims the
+        // gutter beside it, less 3rem so the zone never touches the text.
+        width: "calc((100vw - 36rem) / 2 - 3rem)",
+      }}
+    >
+      <span class="flex p-2 text-white bg-neutral-900 rounded-full opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d={isLeft ? "m15 18-6-6 6-6" : "m9 18 6-6-6-6"} />
+        </svg>
+      </span>
+    </a>
+  )
+}

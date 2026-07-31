@@ -38,6 +38,6 @@ updates:
         dependency-type: development
         patterns: ["*"]
       react:
-        patterns: ["react", "react-dom", "@types/react"]
-      next:
-        patterns: ["next", "eslint-config-next"]
+        patterns: ["react", "react-dom", "@types/react", "@types/react-dom"]
+      astro:
+        patterns: ["astro", "@astrojs/*"]

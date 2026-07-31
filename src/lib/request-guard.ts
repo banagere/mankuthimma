@@ -6,9 +6,8 @@
  * verse-corpus imports so the routes stay small.
  */
 
-import type { NextRequest } from "next/server";
 import { kv } from "@vercel/kv";
-import site from "@/components/site";
+import site from "@/lib/site";
 
 /** Bucket for callers whose address could not be determined. */
 const UNIDENTIFIED = "unidentified";
@@ -19,6 +18,10 @@ const UNIDENTIFIED = "unidentified";
  * Computed per call rather than at module load: the Vercel env vars differ
  * between the production and preview deployments of the same build, and a
  * value captured at import time would be the wrong one on preview.
+ *
+ * Read from `process.env`, not `import.meta.env`. Astro inlines the latter at
+ * build time, which would bake the *building* deployment's URL into every
+ * later request rather than reading the running one's.
  */
 function allowedOrigins(): string[] {
   // Annotated: `site` is `as const`, so an inferred array would be typed to the
@@ -49,11 +52,11 @@ function allowedOrigins(): string[] {
  * This is not authentication. `Origin` is trivially forged outside a browser.
  * It removes the drive-by case, and the rate limit handles the rest.
  */
-export function isAllowedOrigin(request: NextRequest): boolean {
+export function isAllowedOrigin(request: Request): boolean {
   const origin = request.headers.get("origin");
   if (!origin) return false;
 
-  if (process.env.NODE_ENV === "development") {
+  if (import.meta.env.DEV) {
     try {
       const { hostname } = new URL(origin);
       if (hostname === "localhost" || hostname === "127.0.0.1") return true;
@@ -77,7 +80,7 @@ export function isAllowedOrigin(request: NextRequest): boolean {
  * loosest possible reading of a missing header. Callers use it to apply a much
  * smaller budget instead.
  */
-export function clientAddress(request: NextRequest): {
+export function clientAddress(request: Request): {
   id: string;
   identified: boolean;
 } {
@@ -108,4 +111,12 @@ export async function withinRateLimit(
   const count = await kv.incr(key);
   await kv.expire(key, ttlSeconds);
   return count <= max;
+}
+
+/** JSON response helper — Astro API routes return a bare `Response`. */
+export function json(body: unknown, status = 200): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "content-type": "application/json" },
+  });
 }

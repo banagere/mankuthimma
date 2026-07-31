@@ -1,0 +1,13 @@
+# Do not auto-install peer dependencies.
+#
+# @vercel/analytics and @vercel/speed-insights declare `next` as an *optional*
+# peer, and Bun installs optional peers by default. That pulled the whole of
+# Next.js — and its pinned postcss@8.4.31 and sharp — back into a project that
+# imports neither, and `bun audit` reads the lockfile, so those advisories
+# showed up as ours.
+#
+# Every peer this project actually needs (react, react-dom, astro, eslint,
+# typescript) is a direct dependency already, so nothing here relies on a peer
+# being auto-installed.
+[install]
+peer = false

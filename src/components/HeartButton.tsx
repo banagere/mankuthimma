@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import * as Toggle from "@radix-ui/react-toggle";
 import { Heart } from "lucide-react";
@@ -38,7 +36,7 @@ export default function HeartButton({ verseNumber }: { verseNumber: number }) {
     };
   }, [verseNumber]);
 
-  async function handleToggle(pressed: boolean) {
+  async function handleToggle() {
     if (liked) return; // Already liked, don't toggle off
 
     // Optimistic update
